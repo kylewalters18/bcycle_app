@@ -26,21 +26,15 @@ class Map extends React.Component {
 
     let that = this;
     this.map.on("viewreset", function() {
-      that.setState({reset: true});
+      that.forceUpdate();
     })
-
     this.forceUpdate();
   }
 
   render() {
-    let reset = false;
-    if (this.state) {
-        reset = this.state.reset;
-    }
-
     return (
       <div id="map" style={{height: 'calc(100% - 32px)'}}>
-        <Kiosks map={this.map} enabled={this.props.enabled} viewreset={reset} />
+        <Kiosks map={this.map} />
       </div>
     );
   }

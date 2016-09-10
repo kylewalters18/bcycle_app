@@ -29145,23 +29145,17 @@
 	
 	      var that = this;
 	      this.map.on("viewreset", function () {
-	        that.setState({ reset: true });
+	        that.forceUpdate();
 	      });
-	
 	      this.forceUpdate();
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var reset = false;
-	      if (this.state) {
-	        reset = this.state.reset;
-	      }
-	
 	      return _react2.default.createElement(
 	        'div',
 	        { id: 'map', style: { height: 'calc(100% - 32px)' } },
-	        _react2.default.createElement(_kiosks2.default, { map: this.map, enabled: this.props.enabled, viewreset: reset })
+	        _react2.default.createElement(_kiosks2.default, { map: this.map })
 	      );
 	    }
 	  }]);
