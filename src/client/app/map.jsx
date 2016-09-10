@@ -2,6 +2,8 @@ import React from 'react';
 
 import L from 'leaflet';
 
+import Kiosks from 'kiosks';
+
 class Map extends React.Component {
 
   constructor(props) {
@@ -20,11 +22,26 @@ class Map extends React.Component {
 
     /* Initialize the SVG layer */
     map._initPathRoot()
+    this.map = map;
+
+    let that = this;
+    this.map.on("viewreset", function() {
+      that.setState({reset: true});
+    })
+
+    this.forceUpdate();
   }
 
   render() {
+    let reset = false;
+    if (this.state) {
+        reset = this.state.reset;
+    }
+
     return (
-      <div id="map" style={{height: 'calc(100% - 32px)'}}></div>
+      <div id="map" style={{height: 'calc(100% - 32px)'}}>
+        <Kiosks map={this.map} enabled={this.props.enabled} viewreset={reset} />
+      </div>
     );
   }
 }
