@@ -57,9 +57,15 @@
 	
 	var _reactDom = __webpack_require__(/*! react-dom */ 34);
 	
-	var _layout = __webpack_require__(/*! layout/layout */ 172);
+	var _reactMdl = __webpack_require__(/*! react-mdl */ 173);
 	
-	var _layout2 = _interopRequireDefault(_layout);
+	var _sidebar = __webpack_require__(/*! sidebar */ 243);
+	
+	var _sidebar2 = _interopRequireDefault(_sidebar);
+	
+	var _map = __webpack_require__(/*! map */ 239);
+	
+	var _map2 = _interopRequireDefault(_map);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -70,22 +76,39 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var App = function (_React$Component) {
-	  _inherits(App, _React$Component);
+		_inherits(App, _React$Component);
 	
-	  function App() {
-	    _classCallCheck(this, App);
+		function App() {
+			_classCallCheck(this, App);
 	
-	    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
-	  }
+			return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+		}
 	
-	  _createClass(App, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(_layout2.default, null);
-	    }
-	  }]);
+		_createClass(App, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					{ className: 'mdl-color--grey-900', style: { width: '100%', height: '100%', margin: 'auto' } },
+					_react2.default.createElement(
+						_reactMdl.Grid,
+						null,
+						_react2.default.createElement(
+							_reactMdl.Cell,
+							{ col: 4 },
+							_react2.default.createElement(_sidebar2.default, null)
+						),
+						_react2.default.createElement(
+							_reactMdl.Cell,
+							{ col: 8 },
+							_react2.default.createElement(_map2.default, null)
+						)
+					)
+				);
+			}
+		}]);
 	
-	  return App;
+		return App;
 	}(_react2.default.Component);
 	
 	(0, _reactDom.render)(_react2.default.createElement(App, null), document.getElementById('app'));
@@ -21975,152 +21998,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! (webpack)/~/node-libs-browser/~/process/browser.js */ 3)))
 
 /***/ },
-/* 172 */
-/*!******************************************!*\
-  !*** ./src/client/app/layout/layout.jsx ***!
-  \******************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(/*! react-dom */ 34);
-	
-	var _reactMdl = __webpack_require__(/*! react-mdl */ 173);
-	
-	var _map = __webpack_require__(/*! map */ 239);
-	
-	var _map2 = _interopRequireDefault(_map);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var Layout = function (_React$Component) {
-		_inherits(Layout, _React$Component);
-	
-		function Layout() {
-			_classCallCheck(this, Layout);
-	
-			var _this = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this));
-	
-			_this.state = {
-				kiosksEnabled: false
-			};
-			_this.handleClick = _this.handleClick.bind(_this);
-			return _this;
-		}
-	
-		_createClass(Layout, [{
-			key: 'handleClick',
-			value: function handleClick() {
-				this.setState({ kiosksEnabled: !this.state.kiosksEnabled });
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'div',
-					{ className: 'mdl-color--grey-900', style: { width: '100%', height: '100%', margin: 'auto' } },
-					_react2.default.createElement(
-						_reactMdl.Grid,
-						null,
-						_react2.default.createElement(
-							_reactMdl.Cell,
-							{ col: 4 },
-							_react2.default.createElement(SideBar, null)
-						),
-						_react2.default.createElement(
-							_reactMdl.Cell,
-							{ col: 8 },
-							_react2.default.createElement(_map2.default, { enabled: this.state.kiosksEnabled })
-						)
-					)
-				);
-			}
-		}]);
-	
-		return Layout;
-	}(_react2.default.Component);
-	
-	var SideBar = function (_React$Component2) {
-		_inherits(SideBar, _React$Component2);
-	
-		function SideBar() {
-			_classCallCheck(this, SideBar);
-	
-			return _possibleConstructorReturn(this, (SideBar.__proto__ || Object.getPrototypeOf(SideBar)).apply(this, arguments));
-		}
-	
-		_createClass(SideBar, [{
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					_reactMdl.Grid,
-					null,
-					_react2.default.createElement(
-						_reactMdl.Cell,
-						{ col: 12 },
-						_react2.default.createElement(
-							'div',
-							{ className: 'mdl-typography--display-2 mdl-color--black mdl-typography--text-center mdl-color-text--grey-100' },
-							'Denver B-Cycle'
-						)
-					),
-					_react2.default.createElement(_reactMdl.Cell, { col: 12, className: 'mdl-layout-spacer' }),
-					_react2.default.createElement(
-						_reactMdl.Cell,
-						{ col: 12 },
-						_react2.default.createElement(
-							'div',
-							{ className: 'mdl-typography--title mdl-typography--text-center mdl-color-text--grey-100' },
-							'Show by Time Period'
-						),
-						_react2.default.createElement(_reactMdl.Slider, { min: 0, max: 100, defaultValue: 25 })
-					),
-					_react2.default.createElement(
-						_reactMdl.Cell,
-						{ col: 12 },
-						_react2.default.createElement(
-							_reactMdl.Switch,
-							{ onClick: this.handleClick,
-								className: 'mdl-color-text--grey-100' },
-							'Show by Checkout Locations'
-						)
-					),
-					_react2.default.createElement(
-						_reactMdl.Cell,
-						{ col: 12 },
-						_react2.default.createElement(
-							_reactMdl.Switch,
-							{ onClick: this.handleClick,
-								className: 'mdl-color-text--grey-100' },
-							'Show by Return Locations'
-						)
-					)
-				);
-			}
-		}]);
-	
-		return SideBar;
-	}(_react2.default.Component);
-	
-	exports.default = Layout;
-
-/***/ },
+/* 172 */,
 /* 173 */
 /*!**********************************!*\
   !*** ./~/react-mdl/lib/index.js ***!
@@ -39507,6 +39385,112 @@
 	  Object.defineProperty(exports, '__esModule', { value: true });
 	
 	}));
+
+/***/ },
+/* 243 */
+/*!************************************!*\
+  !*** ./src/client/app/sidebar.jsx ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	var _reactMdl = __webpack_require__(/*! react-mdl */ 173);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var SideBar = function (_React$Component) {
+		_inherits(SideBar, _React$Component);
+	
+		function SideBar() {
+			_classCallCheck(this, SideBar);
+	
+			var _this = _possibleConstructorReturn(this, (SideBar.__proto__ || Object.getPrototypeOf(SideBar)).call(this));
+	
+			_this.state = {
+				kiosksEnabled: false
+			};
+			_this.handleClick = _this.handleClick.bind(_this);
+			return _this;
+		}
+	
+		_createClass(SideBar, [{
+			key: 'handleClick',
+			value: function handleClick() {
+				this.setState({ kiosksEnabled: !this.state.kiosksEnabled });
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					_reactMdl.Grid,
+					null,
+					_react2.default.createElement(
+						_reactMdl.Cell,
+						{ col: 12 },
+						_react2.default.createElement(
+							'div',
+							{ className: 'mdl-typography--display-2 mdl-color--black mdl-typography--text-center mdl-color-text--grey-100' },
+							'Denver B-Cycle'
+						)
+					),
+					_react2.default.createElement(_reactMdl.Cell, { col: 12, className: 'mdl-layout-spacer' }),
+					_react2.default.createElement(
+						_reactMdl.Cell,
+						{ col: 12 },
+						_react2.default.createElement(
+							'div',
+							{ className: 'mdl-typography--title mdl-typography--text-center mdl-color-text--grey-100' },
+							'Show by Time Period'
+						),
+						_react2.default.createElement(_reactMdl.Slider, { min: 0, max: 100, defaultValue: 25 })
+					),
+					_react2.default.createElement(
+						_reactMdl.Cell,
+						{ col: 12 },
+						_react2.default.createElement(
+							_reactMdl.Switch,
+							{ onClick: this.handleClick,
+								className: 'mdl-color-text--grey-100' },
+							'Show by Checkout Locations'
+						)
+					),
+					_react2.default.createElement(
+						_reactMdl.Cell,
+						{ col: 12 },
+						_react2.default.createElement(
+							_reactMdl.Switch,
+							{ onClick: this.handleClick,
+								className: 'mdl-color-text--grey-100' },
+							'Show by Return Locations'
+						)
+					)
+				);
+			}
+		}]);
+	
+		return SideBar;
+	}(_react2.default.Component);
+	
+	exports.default = SideBar;
 
 /***/ }
 /******/ ]);

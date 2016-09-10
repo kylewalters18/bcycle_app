@@ -3,9 +3,9 @@ import { render } from 'react-dom';
 
 import { Grid, Cell, Switch, Slider } from 'react-mdl';
 
-import Map from 'map';
 
-class Layout extends React.Component {
+class SideBar extends React.Component {
+
 	constructor() {
 		super();
 		this.state = {
@@ -17,24 +17,6 @@ class Layout extends React.Component {
 	handleClick() {
 		this.setState({kiosksEnabled: !this.state.kiosksEnabled});
 	}
-
-  	render () {
-	    return (
-			<div className='mdl-color--grey-900' style={{width: '100%', height: '100%', margin: 'auto'}}>
-				<Grid>
-					<Cell col={4}>
-						<SideBar />
-					</Cell>
-					<Cell col={8}>
-						<Map enabled={this.state.kiosksEnabled}/>
-					</Cell>
-				</Grid>
-			</div>
-	    );
-  	}
-}
-
-class SideBar extends React.Component {
 
 	render() {
 		return (
@@ -68,4 +50,4 @@ class SideBar extends React.Component {
 	}
 }
 
-export default Layout;
+export default SideBar;
