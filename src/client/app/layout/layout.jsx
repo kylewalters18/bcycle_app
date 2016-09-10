@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import { Grid, Cell, Switch } from 'react-mdl';
+import { Grid, Cell, Switch, Slider } from 'react-mdl';
 
 import Map from 'map';
 
@@ -23,24 +23,7 @@ class Layout extends React.Component {
 			<div className='mdl-color--grey-900' style={{width: '100%', height: '100%', margin: 'auto'}}>
 				<Grid>
 					<Cell col={4}>
-						<Grid>
-							<Cell col={12}>
-								<h3 className='mdl-shadow--8dp mdl-color--black mdl-typography--text-center mdl-color-text--grey-100'>
-									Denver B-Cycle
-								</h3>
-							</Cell>
-							<Cell col={12}>
-								<h6 className='mdl-shadow--8dp mdl-color--black mdl-typography--text-center mdl-color-text--grey-100'>
-									Controls
-								</h6>
-							</Cell>
-							<Cell col={12}>
-								<Switch onClick={this.handleClick}
-										className='mdl-color-text--grey-100'>
-									Kiosk Locations
-								</Switch>
-							</Cell>
-						</Grid>
+						<SideBar />
 					</Cell>
 					<Cell col={8}>
 						<Map enabled={this.state.kiosksEnabled}/>
@@ -49,6 +32,40 @@ class Layout extends React.Component {
 			</div>
 	    );
   	}
+}
+
+class SideBar extends React.Component {
+
+	render() {
+		return (
+			<Grid>
+				<Cell col={12}>
+					<div className='mdl-typography--display-2 mdl-color--black mdl-typography--text-center mdl-color-text--grey-100'>
+						Denver B-Cycle
+					</div>
+				</Cell>
+				<Cell col={12} className="mdl-layout-spacer"/>
+				<Cell col={12}>
+					<div className='mdl-typography--title mdl-typography--text-center mdl-color-text--grey-100'>
+						Show by Time Period
+					</div>
+					<Slider min={0} max={100} defaultValue={25} />
+				</Cell>
+				<Cell col={12}>
+					<Switch onClick={this.handleClick}
+							className='mdl-color-text--grey-100'>
+						Show by Checkout Locations
+					</Switch>
+				</Cell>
+				<Cell col={12}>
+					<Switch onClick={this.handleClick}
+							className='mdl-color-text--grey-100'>
+						Show by Return Locations
+					</Switch>
+				</Cell>
+			</Grid>
+		)
+	}
 }
 
 export default Layout;

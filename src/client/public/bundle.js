@@ -22041,38 +22041,7 @@
 						_react2.default.createElement(
 							_reactMdl.Cell,
 							{ col: 4 },
-							_react2.default.createElement(
-								_reactMdl.Grid,
-								null,
-								_react2.default.createElement(
-									_reactMdl.Cell,
-									{ col: 12 },
-									_react2.default.createElement(
-										'h3',
-										{ className: 'mdl-shadow--8dp mdl-color--black mdl-typography--text-center mdl-color-text--grey-100' },
-										'Denver B-Cycle'
-									)
-								),
-								_react2.default.createElement(
-									_reactMdl.Cell,
-									{ col: 12 },
-									_react2.default.createElement(
-										'h6',
-										{ className: 'mdl-shadow--8dp mdl-color--black mdl-typography--text-center mdl-color-text--grey-100' },
-										'Controls'
-									)
-								),
-								_react2.default.createElement(
-									_reactMdl.Cell,
-									{ col: 12 },
-									_react2.default.createElement(
-										_reactMdl.Switch,
-										{ onClick: this.handleClick,
-											className: 'mdl-color-text--grey-100' },
-										'Kiosk Locations'
-									)
-								)
-							)
+							_react2.default.createElement(SideBar, null)
 						),
 						_react2.default.createElement(
 							_reactMdl.Cell,
@@ -22085,6 +22054,68 @@
 		}]);
 	
 		return Layout;
+	}(_react2.default.Component);
+	
+	var SideBar = function (_React$Component2) {
+		_inherits(SideBar, _React$Component2);
+	
+		function SideBar() {
+			_classCallCheck(this, SideBar);
+	
+			return _possibleConstructorReturn(this, (SideBar.__proto__ || Object.getPrototypeOf(SideBar)).apply(this, arguments));
+		}
+	
+		_createClass(SideBar, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					_reactMdl.Grid,
+					null,
+					_react2.default.createElement(
+						_reactMdl.Cell,
+						{ col: 12 },
+						_react2.default.createElement(
+							'div',
+							{ className: 'mdl-typography--display-2 mdl-color--black mdl-typography--text-center mdl-color-text--grey-100' },
+							'Denver B-Cycle'
+						)
+					),
+					_react2.default.createElement(_reactMdl.Cell, { col: 12, className: 'mdl-layout-spacer' }),
+					_react2.default.createElement(
+						_reactMdl.Cell,
+						{ col: 12 },
+						_react2.default.createElement(
+							'div',
+							{ className: 'mdl-typography--title mdl-typography--text-center mdl-color-text--grey-100' },
+							'Show by Time Period'
+						),
+						_react2.default.createElement(_reactMdl.Slider, { min: 0, max: 100, defaultValue: 25 })
+					),
+					_react2.default.createElement(
+						_reactMdl.Cell,
+						{ col: 12 },
+						_react2.default.createElement(
+							_reactMdl.Switch,
+							{ onClick: this.handleClick,
+								className: 'mdl-color-text--grey-100' },
+							'Show by Checkout Locations'
+						)
+					),
+					_react2.default.createElement(
+						_reactMdl.Cell,
+						{ col: 12 },
+						_react2.default.createElement(
+							_reactMdl.Switch,
+							{ onClick: this.handleClick,
+								className: 'mdl-color-text--grey-100' },
+							'Show by Return Locations'
+						)
+					)
+				);
+			}
+		}]);
+	
+		return SideBar;
 	}(_react2.default.Component);
 	
 	exports.default = Layout;
@@ -38376,12 +38407,7 @@
 	  function Kiosks(props) {
 	    _classCallCheck(this, Kiosks);
 	
-	    var _this = _possibleConstructorReturn(this, (Kiosks.__proto__ || Object.getPrototypeOf(Kiosks)).call(this, props));
-	
-	    _this.state = {
-	      'kiosks': []
-	    };
-	    return _this;
+	    return _possibleConstructorReturn(this, (Kiosks.__proto__ || Object.getPrototypeOf(Kiosks)).call(this, props));
 	  }
 	
 	  _createClass(Kiosks, [{
@@ -38389,19 +38415,76 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 	
-	      fetch('http://localhost:5000/kiosk').then(function (response) {
+	      fetch('http://localhost:5000/trip').then(function (response) {
 	        return response.json();
 	      }).then(function (json) {
-	        _this2.setState({
-	          'kiosks': json
-	        });
+	        var checkoutKiosksTally = new Map();
+	        var returnKiosksTally = new Map();
 	
-	        /* Add a LatLng object to each item in the dataset */
-	        json.forEach(function (d) {
-	          d.LatLng = new L.LatLng(d.lat, d.lon);
-	        });
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
 	
-	        _this2._create(json);
+	        try {
+	          for (var _iterator = json[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var trip = _step.value;
+	
+	            var checkoutKioskName = trip.checkout_kiosk.name;
+	
+	            if (!checkoutKiosksTally.has(checkoutKioskName)) {
+	              var lat = trip.checkout_kiosk.lat;
+	              var lon = trip.checkout_kiosk.lon;
+	              checkoutKiosksTally.set(checkoutKioskName, { 'tally': 0, 'lat': lat, 'lon': lon });
+	            }
+	
+	            var kiosk = checkoutKiosksTally.get(checkoutKioskName);
+	            kiosk.tally++;
+	            checkoutKiosksTally.set(checkoutKioskName, kiosk);
+	          }
+	
+	          /* Add a LatLng object to each item in the dataset */
+	        } catch (err) {
+	          _didIteratorError = true;
+	          _iteratorError = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	              _iterator.return();
+	            }
+	          } finally {
+	            if (_didIteratorError) {
+	              throw _iteratorError;
+	            }
+	          }
+	        }
+	
+	        var values = Array.from(checkoutKiosksTally.values());
+	        var _iteratorNormalCompletion2 = true;
+	        var _didIteratorError2 = false;
+	        var _iteratorError2 = undefined;
+	
+	        try {
+	          for (var _iterator2 = values[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	            var d = _step2.value;
+	
+	            d.LatLng = new L.LatLng(d.lat, d.lon);
+	          }
+	        } catch (err) {
+	          _didIteratorError2 = true;
+	          _iteratorError2 = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	              _iterator2.return();
+	            }
+	          } finally {
+	            if (_didIteratorError2) {
+	              throw _iteratorError2;
+	            }
+	          }
+	        }
+	
+	        _this2._create(values);
 	
 	        _this2.forceUpdate();
 	      });
@@ -38414,9 +38497,8 @@
 	
 	      var points = svg.selectAll("circle").data(dataset);
 	
-	      var that = this;
 	      this.feature = points.enter().append("circle").style("opacity", .6).style("fill", "#00e6e6").attr("r", function (d) {
-	        return that._getRandomInt(5, 30);
+	        return d.tally;
 	      });
 	    }
 	  }, {

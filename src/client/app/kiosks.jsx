@@ -6,27 +6,37 @@ class Kiosks extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      'kiosks': []
-    }
   }
 
   componentDidMount() {
-    fetch('http://localhost:5000/kiosk')
+    fetch('http://localhost:5000/trip')
     .then((response) => {
       return response.json();
     })
     .then((json) => {
-      this.setState({
-        'kiosks': json
-      });
+      let checkoutKiosksTally = new Map();
+      let returnKiosksTally = new Map();
+
+      for (let trip of json) {
+        let checkoutKioskName = trip.checkout_kiosk.name;
+
+        if(!checkoutKiosksTally.has(checkoutKioskName)) {
+          let lat = trip.checkout_kiosk.lat;
+          let lon = trip.checkout_kiosk.lon;
+          checkoutKiosksTally.set(checkoutKioskName, {'tally': 0, 'lat': lat, 'lon': lon});
+        }
+
+        let kiosk = checkoutKiosksTally.get(checkoutKioskName);
+        kiosk.tally++;
+        checkoutKiosksTally.set(checkoutKioskName, kiosk);
+      }
 
       /* Add a LatLng object to each item in the dataset */
-      json.forEach(function(d) {
+      let values = Array.from(checkoutKiosksTally.values());
+      for (let d of values) {
         d.LatLng = new L.LatLng(d.lat, d.lon);
-      })
-
-      this._create(json);
+      }
+      this._create(values);
 
       this.forceUpdate();
     });
@@ -39,12 +49,11 @@ class Kiosks extends React.Component {
     const points = svg.selectAll("circle")
       .data(dataset);
 
-    let that = this;
     this.feature = points
       .enter().append("circle")
         .style("opacity", .6)
         .style("fill", "#00e6e6")
-        .attr("r", function(d) { return that._getRandomInt(5,30); });
+        .attr("r", function(d) { return d.tally; });
 
   }
 
