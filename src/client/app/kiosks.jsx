@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { select } from "d3-selection";
+import { transition } from "d3-transition";
 
 class Kiosks extends React.Component {
 
@@ -14,48 +15,72 @@ class Kiosks extends React.Component {
       return response.json();
     })
     .then((json) => {
-      let checkoutKiosksTally = new Map();
-      let returnKiosksTally = new Map();
+      let checkoutKiosksTally = this._tallyKiosks(json);
+      //let returnKiosksTally = this._tallyKiosks(json);
 
-      for (let trip of json) {
-        let checkoutKioskName = trip.checkout_kiosk.name;
-
-        if(!checkoutKiosksTally.has(checkoutKioskName)) {
-          let lat = trip.checkout_kiosk.lat;
-          let lon = trip.checkout_kiosk.lon;
-          checkoutKiosksTally.set(checkoutKioskName, {'tally': 0, 'lat': lat, 'lon': lon});
-        }
-
-        let kiosk = checkoutKiosksTally.get(checkoutKioskName);
-        kiosk.tally++;
-        checkoutKiosksTally.set(checkoutKioskName, kiosk);
-      }
 
       /* Add a LatLng object to each item in the dataset */
       let values = Array.from(checkoutKiosksTally.values());
       for (let d of values) {
         d.LatLng = new L.LatLng(d.lat, d.lon);
       }
-      this._create(values);
 
-      this.forceUpdate();
+      this.svg = select("#map").select("svg");
+      this._updatePlot(values);
+
+      this.setState({checkoutKiosks: values});
     });
   }
 
-  _create(dataset) {
-    /* We simply pick up the SVG from the map object */
-    var svg = select("#map").select("svg");
+  _tallyKiosks(trips) {
+    let map = new Map();
+    for (let trip of trips) {
+      let kioskName = trip.checkout_kiosk.name;
 
-    const points = svg.selectAll("circle")
-      .data(dataset);
+      if(!map.has(kioskName)) {
+        map.set(kioskName, {
+          'tally': 0,
+          'lat': trip.checkout_kiosk.lat,
+          'lon': trip.checkout_kiosk.lon
+        });
+      }
 
-    this.feature = points
-      .enter().append("circle")
+      map.get(kioskName).tally++;
+    }
+    return map;
+  }
+
+  _updatePlot(data) {
+    let map = this.props.map;
+
+    let points = this.svg.selectAll("circle").data(data);
+
+    // Enter section
+    points.enter().append("circle")
+        .style("opacity", 0)
+        .attr("r", 0)
+        .attr("transform", function(d) {
+            return "translate("+ map.latLngToLayerPoint(d.LatLng).x + ","+ map.latLngToLayerPoint(d.LatLng).y + ")";
+          })
+      .transition().duration(500)
         .style("opacity", .6)
         .style("fill", "#00e6e6")
         .attr("r", function(d) { return d.tally; });
 
+    // Update section
+    points
+      .attr("transform", function(d) {
+          return "translate("+ map.latLngToLayerPoint(d.LatLng).x + ","+ map.latLngToLayerPoint(d.LatLng).y + ")";
+        });
+
+    // Exit section
+    points.exit()
+      .transition().duration(500)
+        .style("opacity", 0)
+        .attr("r", 0)
+        .remove();
   }
+
 
   _getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -64,12 +89,12 @@ class Kiosks extends React.Component {
   }
 
   render() {
-    console.log(this.props.checkoutKiosksEnabled)
-    let map = this.props.map;
-    if (this.feature) {
-      this.feature.attr("transform", function(d) {
-          return "translate("+ map.latLngToLayerPoint(d.LatLng).x + ","+ map.latLngToLayerPoint(d.LatLng).y + ")";
-      });
+    if (this.props.checkoutKiosksEnabled) {
+      if (this.state) {
+        this._updatePlot(this.state.checkoutKiosks);
+      }
+    } else {
+      this._updatePlot([]);
     }
 
     return null;
