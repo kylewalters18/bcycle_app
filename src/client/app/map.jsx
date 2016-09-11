@@ -32,8 +32,7 @@ class Map extends React.Component {
     return (
       <div id="map" style={{height: 'calc(100% - 32px)'}}>
         <Kiosks map={this.map}
-                checkoutKiosksEnabled = { this.props.checkoutKiosksEnabled }
-                returnKiosksEnabled = { this.props.returnKiosksEnabled } />
+                toggle = { this.props.toggle } />
       </div>
     );
   }

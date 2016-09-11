@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import { Grid, Cell, Switch } from 'react-mdl';
+import { Grid, Cell, Switch, RadioGroup, Radio } from 'react-mdl';
 
 
 class SideBar extends React.Component {
@@ -9,16 +9,11 @@ class SideBar extends React.Component {
 	constructor() {
 		super();
 
-		this.handleCheckoutClick = this.handleCheckoutClick.bind(this);
-		this.handleReturnClick = this.handleReturnClick.bind(this);
+		this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleCheckoutClick() {
-		this.props.onCheckoutEnabled();
-	}
-
-	handleReturnClick() {
-		this.props.onReturnEnabled();
+	handleClick(event) {
+		this.props.onToggle();
 	}
 
 	render() {
@@ -31,16 +26,10 @@ class SideBar extends React.Component {
 				</Cell>
 				<Cell col={12} className="mdl-layout-spacer"/>
 				<Cell col={12}>
-					<Switch defaultChecked onClick={this.handleCheckoutClick}
-							className='mdl-color-text--grey-100'>
-						Show by Checkout Locations
-					</Switch>
-				</Cell>
-				<Cell col={12}>
-					<Switch onClick={this.handleReturnClick}
-							className='mdl-color-text--grey-100'>
-						Show by Return Locations
-					</Switch>
+					<RadioGroup value="checkout" name="kiosks">
+					    <Radio value="checkout" className='mdl-color-text--grey-100' onClick={ this.handleClick }>Checkout Kiosks</Radio>
+					    <Radio value="return" className='mdl-color-text--grey-100' onClick={ this.handleClick }>Return Kiosks</Radio>
+					</RadioGroup>
 				</Cell>
 			</Grid>
 		)

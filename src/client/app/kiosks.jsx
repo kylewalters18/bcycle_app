@@ -15,45 +15,42 @@ class Kiosks extends React.Component {
       return response.json();
     })
     .then((json) => {
-      let checkoutKiosksTally = this._tallyKiosks(json);
-      //let returnKiosksTally = this._tallyKiosks(json);
-
-
-      /* Add a LatLng object to each item in the dataset */
-      let values = Array.from(checkoutKiosksTally.values());
-      for (let d of values) {
-        d.LatLng = new L.LatLng(d.lat, d.lon);
-      }
+      let checkoutKiosksTally = this._tallyKiosks(json, function(d) { return d.checkout_kiosk; });
+      let returnKiosksTally = this._tallyKiosks(json, function(d) { return d.return_kiosk; });
 
       this.svg = select("#map").select("svg");
-      this._updatePlot(values);
+      this._updatePlot(checkoutKiosksTally);
 
-      this.setState({checkoutKiosks: values});
+      this.setState({
+        checkoutKiosks: checkoutKiosksTally,
+        returnKiosks: returnKiosksTally
+      });
     });
   }
 
-  _tallyKiosks(trips) {
+  _tallyKiosks(trips, extractKiosk) {
     let map = new Map();
     for (let trip of trips) {
-      let kioskName = trip.checkout_kiosk.name;
+      let kiosk = extractKiosk(trip);
+      let kioskName = kiosk.name;
 
       if(!map.has(kioskName)) {
         map.set(kioskName, {
           'tally': 0,
-          'lat': trip.checkout_kiosk.lat,
-          'lon': trip.checkout_kiosk.lon
+          'LatLng': new L.LatLng(kiosk.lat, kiosk.lon),
+          'name': kiosk.name
         });
       }
 
       map.get(kioskName).tally++;
     }
-    return map;
+    return Array.from(map.values());
   }
 
   _updatePlot(data) {
     let map = this.props.map;
 
-    let points = this.svg.selectAll("circle").data(data);
+    let points = this.svg.selectAll("circle").data(data, function(d) { return d.name; });
 
     // Enter section
     points.enter().append("circle")
@@ -62,16 +59,21 @@ class Kiosks extends React.Component {
         .attr("transform", function(d) {
             return "translate("+ map.latLngToLayerPoint(d.LatLng).x + ","+ map.latLngToLayerPoint(d.LatLng).y + ")";
           })
+        .on('click', function(d) { console.log("name: " + d.name + "\ntally: " + d.tally); })
       .transition().duration(500)
         .style("opacity", .6)
-        .style("fill", "#00e6e6")
+        .style("fill", "rgb(255, 87, 34)")
         .attr("r", function(d) { return d.tally; });
 
     // Update section
     points
-      .attr("transform", function(d) {
-          return "translate("+ map.latLngToLayerPoint(d.LatLng).x + ","+ map.latLngToLayerPoint(d.LatLng).y + ")";
-        });
+        .attr("transform", function(d) {
+            return "translate("+ map.latLngToLayerPoint(d.LatLng).x + ","+ map.latLngToLayerPoint(d.LatLng).y + ")";
+        })
+      .transition().duration(500)
+        .style("opacity", .6)
+        .style("fill", "rgb(255, 87, 34)")
+        .attr("r", function(d) { return d.tally; })
 
     // Exit section
     points.exit()
@@ -81,20 +83,13 @@ class Kiosks extends React.Component {
         .remove();
   }
 
-
-  _getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min)) + min;
-  }
-
   render() {
-    if (this.props.checkoutKiosksEnabled) {
-      if (this.state) {
-        this._updatePlot(this.state.checkoutKiosks);
-      }
+    if (!this.state) { return null; }
+
+    if (this.props.toggle) {
+      this._updatePlot(this.state.checkoutKiosks);
     } else {
-      this._updatePlot([]);
+      this._updatePlot(this.state.returnKiosks);
     }
 
     return null;

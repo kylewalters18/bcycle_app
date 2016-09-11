@@ -11,20 +11,14 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-	      checkoutKiosksEnabled: true,
-	      returnKiosksEnabled: false
+	      toggle: true
 	    };
 
-	    this.onCheckoutEnabled = this.onCheckoutEnabled.bind(this);
-	   	this.onReturnEnabled = this.onReturnEnabled.bind(this);
+	    this.onToggle = this.onToggle.bind(this);
 	}
 
-	onCheckoutEnabled() {
-		this.setState({ checkoutKiosksEnabled: !this.state.checkoutKiosksEnabled });
-	}
-
-	onReturnEnabled() {
-		this.setState({ returnKiosksEnabled: !this.state.returnKiosksEnabled });
+	onToggle() {
+		this.setState({ toggle: !this.state.toggle });
 	}
 
    	render () {
@@ -32,12 +26,10 @@ class App extends React.Component {
 			<div className='mdl-color--grey-900' style={{width: '100%', height: '100%', margin: 'auto'}}>
 				<Grid>
 					<Cell col={4}>
-						<SideBar onCheckoutEnabled={ this.onCheckoutEnabled }
-							 	 onReturnEnabled = { this.onReturnEnabled } />
+						<SideBar onToggle={ this.onToggle } />
 					</Cell>
 					<Cell col={8}>
-						<Map checkoutKiosksEnabled={ this.state.checkoutKiosksEnabled }
-							 returnKiosksEnabled = { this.state.returnKiosksEnabled } />
+						<Map toggle={ this.state.toggle } />
 					</Cell>
 				</Grid>
 			</div>
