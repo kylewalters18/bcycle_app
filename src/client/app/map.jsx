@@ -24,17 +24,16 @@ class Map extends React.Component {
     map._initPathRoot()
     this.map = map;
 
-    let that = this;
-    this.map.on("viewreset", function() {
-      that.forceUpdate();
-    })
+    this.map.on("viewreset", () => this.forceUpdate());
     this.forceUpdate();
   }
 
   render() {
     return (
       <div id="map" style={{height: 'calc(100% - 32px)'}}>
-        <Kiosks map={this.map} />
+        <Kiosks map={this.map}
+                checkoutKiosksEnabled = { this.props.checkoutKiosksEnabled }
+                returnKiosksEnabled = { this.props.returnKiosksEnabled } />
       </div>
     );
   }

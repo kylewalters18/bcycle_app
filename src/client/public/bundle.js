@@ -81,10 +81,29 @@
 		function App() {
 			_classCallCheck(this, App);
 	
-			return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
+	
+			_this.state = {
+				checkoutKiosksEnabled: true,
+				returnKiosksEnabled: false
+			};
+	
+			_this.onCheckoutEnabled = _this.onCheckoutEnabled.bind(_this);
+			_this.onReturnEnabled = _this.onReturnEnabled.bind(_this);
+			return _this;
 		}
 	
 		_createClass(App, [{
+			key: 'onCheckoutEnabled',
+			value: function onCheckoutEnabled() {
+				this.setState({ checkoutKiosksEnabled: !this.state.checkoutKiosksEnabled });
+			}
+		}, {
+			key: 'onReturnEnabled',
+			value: function onReturnEnabled() {
+				this.setState({ returnKiosksEnabled: !this.state.returnKiosksEnabled });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				return _react2.default.createElement(
@@ -96,12 +115,14 @@
 						_react2.default.createElement(
 							_reactMdl.Cell,
 							{ col: 4 },
-							_react2.default.createElement(_sidebar2.default, null)
+							_react2.default.createElement(_sidebar2.default, { onCheckoutEnabled: this.onCheckoutEnabled,
+								onReturnEnabled: this.onReturnEnabled })
 						),
 						_react2.default.createElement(
 							_reactMdl.Cell,
 							{ col: 8 },
-							_react2.default.createElement(_map2.default, null)
+							_react2.default.createElement(_map2.default, { checkoutKiosksEnabled: this.state.checkoutKiosksEnabled,
+								returnKiosksEnabled: this.state.returnKiosksEnabled })
 						)
 					)
 				);
@@ -29041,6 +29062,8 @@
 	  _createClass(Map, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      var _this2 = this;
+	
 	      var layer = _leaflet2.default.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
 	        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
 	      });
@@ -29052,9 +29075,8 @@
 	      map._initPathRoot();
 	      this.map = map;
 	
-	      var that = this;
 	      this.map.on("viewreset", function () {
-	        that.forceUpdate();
+	        return _this2.forceUpdate();
 	      });
 	      this.forceUpdate();
 	    }
@@ -29064,7 +29086,9 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { id: 'map', style: { height: 'calc(100% - 32px)' } },
-	        _react2.default.createElement(_kiosks2.default, { map: this.map })
+	        _react2.default.createElement(_kiosks2.default, { map: this.map,
+	          checkoutKiosksEnabled: this.props.checkoutKiosksEnabled,
+	          returnKiosksEnabled: this.props.returnKiosksEnabled })
 	      );
 	    }
 	  }]);
@@ -38389,6 +38413,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      console.log(this.props.checkoutKiosksEnabled);
 	      var map = this.props.map;
 	      if (this.feature) {
 	        this.feature.attr("transform", function (d) {
@@ -38396,7 +38421,7 @@
 	        });
 	      }
 	
-	      return _react2.default.createElement('div', { className: 'chart' });
+	      return null;
 	    }
 	  }]);
 	
@@ -39425,17 +39450,20 @@
 	
 			var _this = _possibleConstructorReturn(this, (SideBar.__proto__ || Object.getPrototypeOf(SideBar)).call(this));
 	
-			_this.state = {
-				kiosksEnabled: false
-			};
-			_this.handleClick = _this.handleClick.bind(_this);
+			_this.handleCheckoutClick = _this.handleCheckoutClick.bind(_this);
+			_this.handleReturnClick = _this.handleReturnClick.bind(_this);
 			return _this;
 		}
 	
 		_createClass(SideBar, [{
-			key: 'handleClick',
-			value: function handleClick() {
-				this.setState({ kiosksEnabled: !this.state.kiosksEnabled });
+			key: 'handleCheckoutClick',
+			value: function handleCheckoutClick() {
+				this.props.onCheckoutEnabled();
+			}
+		}, {
+			key: 'handleReturnClick',
+			value: function handleReturnClick() {
+				this.props.onReturnEnabled();
 			}
 		}, {
 			key: 'render',
@@ -39457,18 +39485,8 @@
 						_reactMdl.Cell,
 						{ col: 12 },
 						_react2.default.createElement(
-							'div',
-							{ className: 'mdl-typography--title mdl-typography--text-center mdl-color-text--grey-100' },
-							'Show by Time Period'
-						),
-						_react2.default.createElement(_reactMdl.Slider, { min: 0, max: 100, defaultValue: 25 })
-					),
-					_react2.default.createElement(
-						_reactMdl.Cell,
-						{ col: 12 },
-						_react2.default.createElement(
 							_reactMdl.Switch,
-							{ onClick: this.handleClick,
+							{ defaultChecked: true, onClick: this.handleCheckoutClick,
 								className: 'mdl-color-text--grey-100' },
 							'Show by Checkout Locations'
 						)
@@ -39478,7 +39496,7 @@
 						{ col: 12 },
 						_react2.default.createElement(
 							_reactMdl.Switch,
-							{ onClick: this.handleClick,
+							{ onClick: this.handleReturnClick,
 								className: 'mdl-color-text--grey-100' },
 							'Show by Return Locations'
 						)

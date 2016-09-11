@@ -64,6 +64,7 @@ class Kiosks extends React.Component {
   }
 
   render() {
+    console.log(this.props.checkoutKiosksEnabled)
     let map = this.props.map;
     if (this.feature) {
       this.feature.attr("transform", function(d) {
@@ -71,9 +72,7 @@ class Kiosks extends React.Component {
       });
     }
 
-    return (
-      <div className="chart"></div>
-    );
+    return null;
   }
 }
 

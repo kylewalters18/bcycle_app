@@ -1,21 +1,24 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import { Grid, Cell, Switch, Slider } from 'react-mdl';
+import { Grid, Cell, Switch } from 'react-mdl';
 
 
 class SideBar extends React.Component {
 
 	constructor() {
 		super();
-		this.state = {
-			kiosksEnabled: false
-		};
-		this.handleClick = this.handleClick.bind(this);
+
+		this.handleCheckoutClick = this.handleCheckoutClick.bind(this);
+		this.handleReturnClick = this.handleReturnClick.bind(this);
 	}
 
-	handleClick() {
-		this.setState({kiosksEnabled: !this.state.kiosksEnabled});
+	handleCheckoutClick() {
+		this.props.onCheckoutEnabled();
+	}
+
+	handleReturnClick() {
+		this.props.onReturnEnabled();
 	}
 
 	render() {
@@ -28,19 +31,13 @@ class SideBar extends React.Component {
 				</Cell>
 				<Cell col={12} className="mdl-layout-spacer"/>
 				<Cell col={12}>
-					<div className='mdl-typography--title mdl-typography--text-center mdl-color-text--grey-100'>
-						Show by Time Period
-					</div>
-					<Slider min={0} max={100} defaultValue={25} />
-				</Cell>
-				<Cell col={12}>
-					<Switch onClick={this.handleClick}
+					<Switch defaultChecked onClick={this.handleCheckoutClick}
 							className='mdl-color-text--grey-100'>
 						Show by Checkout Locations
 					</Switch>
 				</Cell>
 				<Cell col={12}>
-					<Switch onClick={this.handleClick}
+					<Switch onClick={this.handleReturnClick}
 							className='mdl-color-text--grey-100'>
 						Show by Return Locations
 					</Switch>
