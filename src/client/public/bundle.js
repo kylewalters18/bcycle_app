@@ -87,14 +87,20 @@
 				toggle: true
 			};
 	
-			_this.onToggle = _this.onToggle.bind(_this);
+			_this.handleCheckout = _this.handleCheckout.bind(_this);
+			_this.handleReturn = _this.handleReturn.bind(_this);
 			return _this;
 		}
 	
 		_createClass(App, [{
-			key: 'onToggle',
-			value: function onToggle() {
-				this.setState({ toggle: !this.state.toggle });
+			key: 'handleCheckout',
+			value: function handleCheckout() {
+				this.setState({ toggle: true });
+			}
+		}, {
+			key: 'handleReturn',
+			value: function handleReturn() {
+				this.setState({ toggle: false });
 			}
 		}, {
 			key: 'render',
@@ -107,12 +113,13 @@
 						null,
 						_react2.default.createElement(
 							_reactMdl.Cell,
-							{ col: 4 },
-							_react2.default.createElement(_sidebar2.default, { onToggle: this.onToggle })
+							{ col: 5 },
+							_react2.default.createElement(_sidebar2.default, { handleCheckout: this.handleCheckout,
+								handleReturn: this.handleReturn })
 						),
 						_react2.default.createElement(
 							_reactMdl.Cell,
-							{ col: 8 },
+							{ col: 7 },
 							_react2.default.createElement(_map2.default, { toggle: this.state.toggle })
 						)
 					)
@@ -29044,14 +29051,20 @@
 	
 			var _this = _possibleConstructorReturn(this, (SideBar.__proto__ || Object.getPrototypeOf(SideBar)).call(this));
 	
-			_this.handleClick = _this.handleClick.bind(_this);
+			_this.handleCheckout = _this.handleCheckout.bind(_this);
+			_this.handleReturn = _this.handleReturn.bind(_this);
 			return _this;
 		}
 	
 		_createClass(SideBar, [{
-			key: 'handleClick',
-			value: function handleClick(event) {
-				this.props.onToggle();
+			key: 'handleCheckout',
+			value: function handleCheckout() {
+				this.props.handleCheckout();
+			}
+		}, {
+			key: 'handleReturn',
+			value: function handleReturn() {
+				this.props.handleReturn();
 			}
 		}, {
 			key: 'render',
@@ -29077,12 +29090,12 @@
 							{ value: 'checkout', name: 'kiosks' },
 							_react2.default.createElement(
 								_reactMdl.Radio,
-								{ value: 'checkout', className: 'mdl-color-text--grey-100', onClick: this.handleClick },
+								{ value: 'checkout', className: 'mdl-color-text--grey-100', onClick: this.handleCheckout },
 								'Checkout Kiosks'
 							),
 							_react2.default.createElement(
 								_reactMdl.Radio,
-								{ value: 'return', className: 'mdl-color-text--grey-100', onClick: this.handleClick },
+								{ value: 'return', className: 'mdl-color-text--grey-100', onClick: this.handleReturn },
 								'Return Kiosks'
 							)
 						)
@@ -38472,8 +38485,6 @@
 	      // Enter section
 	      points.enter().append("circle").style("opacity", 0).attr("r", 0).attr("transform", function (d) {
 	        return "translate(" + map.latLngToLayerPoint(d.LatLng).x + "," + map.latLngToLayerPoint(d.LatLng).y + ")";
-	      }).on('click', function (d) {
-	        console.log("name: " + d.name + "\ntally: " + d.tally);
 	      }).transition().duration(500).style("opacity", .6).style("fill", "rgb(255, 87, 34)").attr("r", function (d) {
 	        return d.tally;
 	      });
@@ -38481,6 +38492,8 @@
 	      // Update section
 	      points.attr("transform", function (d) {
 	        return "translate(" + map.latLngToLayerPoint(d.LatLng).x + "," + map.latLngToLayerPoint(d.LatLng).y + ")";
+	      }).on('click', function (d) {
+	        (0, _d3Selection.select)(this).style("fill", "rgb(33, 150, 243)");
 	      }).transition().duration(500).style("opacity", .6).style("fill", "rgb(255, 87, 34)").attr("r", function (d) {
 	        return d.tally;
 	      });

@@ -9,11 +9,16 @@ class SideBar extends React.Component {
 	constructor() {
 		super();
 
-		this.handleClick = this.handleClick.bind(this);
+		this.handleCheckout = this.handleCheckout.bind(this);
+		this.handleReturn = this.handleReturn.bind(this);
 	}
 
-	handleClick(event) {
-		this.props.onToggle();
+	handleCheckout() {
+		this.props.handleCheckout();
+	}
+
+	handleReturn() {
+		this.props.handleReturn();
 	}
 
 	render() {
@@ -27,8 +32,8 @@ class SideBar extends React.Component {
 				<Cell col={12} className="mdl-layout-spacer"/>
 				<Cell col={12}>
 					<RadioGroup value="checkout" name="kiosks">
-					    <Radio value="checkout" className='mdl-color-text--grey-100' onClick={ this.handleClick }>Checkout Kiosks</Radio>
-					    <Radio value="return" className='mdl-color-text--grey-100' onClick={ this.handleClick }>Return Kiosks</Radio>
+					    <Radio value="checkout" className='mdl-color-text--grey-100' onClick={ this.handleCheckout }>Checkout Kiosks</Radio>
+					    <Radio value="return" className='mdl-color-text--grey-100' onClick={ this.handleReturn }>Return Kiosks</Radio>
 					</RadioGroup>
 				</Cell>
 			</Grid>
