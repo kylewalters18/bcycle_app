@@ -38412,7 +38412,7 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 	
-	      fetch('http://localhost:5000/trip').then(function (response) {
+	      fetch('https://bcycle.herokuapp.com/trip').then(function (response) {
 	        return response.json();
 	      }).then(function (json) {
 	        var checkoutKiosksTally = _this2._tallyKiosks(json, function (d) {

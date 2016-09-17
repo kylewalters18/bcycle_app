@@ -10,7 +10,7 @@ class Kiosks extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:5000/trip')
+    fetch('https://bcycle.herokuapp.com/trip')
     .then((response) => {
       return response.json();
     })
