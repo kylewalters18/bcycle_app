@@ -59,6 +59,10 @@
 	
 	var _redux = __webpack_require__(/*! redux */ 179);
 	
+	var _reduxThunk = __webpack_require__(/*! redux-thunk */ 285);
+	
+	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
+	
 	var _reducers = __webpack_require__(/*! reducers */ 201);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
@@ -69,7 +73,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var store = (0, _redux.createStore)(_reducers2.default);
+	var store = (0, _redux.applyMiddleware)(_reduxThunk2.default)(_redux.createStore)(_reducers2.default);
 	
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRedux.Provider,
@@ -23840,10 +23844,15 @@
 	
 	var _toggle2 = _interopRequireDefault(_toggle);
 	
+	var _trips = __webpack_require__(/*! reducers/trips */ 284);
+	
+	var _trips2 = _interopRequireDefault(_trips);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var reducer = (0, _redux.combineReducers)({
-	  controls: _toggle2.default
+	  controls: _toggle2.default,
+	  trips: _trips2.default
 	});
 	
 	exports.default = reducer;
@@ -23861,7 +23870,7 @@
 	  value: true
 	});
 	var controls = function controls() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? 'checkout' : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -31086,7 +31095,7 @@
 	        ),
 	        _react2.default.createElement(
 	          _reactMdl.Radio,
-	          { value: 'checkout',
+	          { value: 'return',
 	            className: 'mdl-color-text--grey-100',
 	            onClick: function onClick() {
 	              return _this2.props.dispatch((0, _actions.toggle)('return'));
@@ -31114,14 +31123,94 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 	exports.toggle = toggle;
+	exports.fetchTripsSync = fetchTripsSync;
+	exports.receiveTrips = receiveTrips;
+	exports.fetchTripsAsync = fetchTripsAsync;
 	function toggle(option) {
-	  return {
-	    type: 'TOGGLE_RADIO',
-	    option: option
-	  };
+		return {
+			type: 'TOGGLE_RADIO',
+			option: option
+		};
+	}
+	
+	function fetchTripsSync(text) {
+		return {
+			type: 'FETCH_TRIPS',
+			text: text
+		};
+	}
+	
+	function receiveTrips(trips) {
+		return {
+			type: 'RECEIVE_TRIPS',
+			trips: trips
+		};
+	}
+	
+	function fetchTripsAsync(text) {
+		return function (dispatch) {
+			// dispatch the sync action to update ui
+			dispatch(fetchTripsSync(text));
+	
+			// async call to get the new data
+			fetch('https://bcycle.herokuapp.com/trip').then(function (response) {
+				return response.json();
+			}).then(function (json) {
+				var trips = {
+					checkoutKiosksTally: tallyKiosks(json, function (d) {
+						return d.checkout_kiosk;
+					}),
+					returnKiosksTally: tallyKiosks(json, function (d) {
+						return d.return_kiosk;
+					})
+				};
+				dispatch(receiveTrips(trips));
+			});
+		};
+	}
+	
+	function tallyKiosks(trips, extractKiosk) {
+		var map = new Map();
+		var _iteratorNormalCompletion = true;
+		var _didIteratorError = false;
+		var _iteratorError = undefined;
+	
+		try {
+			for (var _iterator = trips[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+				var trip = _step.value;
+	
+				var kiosk = extractKiosk(trip);
+				var kioskName = kiosk.name;
+	
+				if (!map.has(kioskName)) {
+					map.set(kioskName, {
+						'tally': 0,
+						'LatLng': new L.LatLng(kiosk.lat, kiosk.lon),
+						'name': kiosk.name
+					});
+				}
+	
+				map.get(kioskName).tally++;
+			}
+		} catch (err) {
+			_didIteratorError = true;
+			_iteratorError = err;
+		} finally {
+			try {
+				if (!_iteratorNormalCompletion && _iterator.return) {
+					_iterator.return();
+				}
+			} finally {
+				if (_didIteratorError) {
+					throw _iteratorError;
+				}
+			}
+		}
+	
+		return Array.from(map.values());
 	}
 
 /***/ },
@@ -31146,6 +31235,8 @@
 	var _leaflet = __webpack_require__(/*! leaflet */ 274);
 	
 	var _leaflet2 = _interopRequireDefault(_leaflet);
+	
+	var _d3Selection = __webpack_require__(/*! d3-selection */ 277);
 	
 	var _Kiosks = __webpack_require__(/*! containers/Kiosks */ 275);
 	
@@ -40396,7 +40487,7 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 172);
 	
-	var _actions = __webpack_require__(/*! ../actions */ 272);
+	var _actions = __webpack_require__(/*! actions */ 272);
 	
 	var _Kiosks = __webpack_require__(/*! components/Kiosks */ 276);
 	
@@ -40407,11 +40498,21 @@
 	function mapStateToProps(state, ownProps) {
 	  return {
 	    toggle: state.controls,
+	    checkoutKiosks: state.trips.checkoutKiosksTally,
+	    returnKiosks: state.trips.returnKiosksTally,
 	    map: ownProps.map
 	  };
 	}
 	
-	var VisibleKiosks = (0, _reactRedux.connect)(mapStateToProps)(_Kiosks2.default);
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    onInitialize: function onInitialize() {
+	      return dispatch((0, _actions.fetchTripsAsync)());
+	    }
+	  };
+	}
+	
+	var VisibleKiosks = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Kiosks2.default);
 	
 	exports.default = VisibleKiosks;
 
@@ -40458,72 +40559,12 @@
 	  _createClass(Kiosks, [{
 	    key: "componentDidMount",
 	    value: function componentDidMount() {
-	      var _this2 = this;
-	
-	      fetch('https://bcycle.herokuapp.com/trip').then(function (response) {
-	        return response.json();
-	      }).then(function (json) {
-	        var checkoutKiosksTally = _this2._tallyKiosks(json, function (d) {
-	          return d.checkout_kiosk;
-	        });
-	        var returnKiosksTally = _this2._tallyKiosks(json, function (d) {
-	          return d.return_kiosk;
-	        });
-	
-	        _this2.svg = (0, _d3Selection.select)("#map").select("svg");
-	        _this2._updatePlot(checkoutKiosksTally);
-	
-	        _this2.setState({
-	          checkoutKiosks: checkoutKiosksTally,
-	          returnKiosks: returnKiosksTally
-	        });
-	      });
+	      this.props.onInitialize();
 	    }
 	  }, {
-	    key: "_tallyKiosks",
-	    value: function _tallyKiosks(trips, extractKiosk) {
-	      var map = new Map();
-	      var _iteratorNormalCompletion = true;
-	      var _didIteratorError = false;
-	      var _iteratorError = undefined;
-	
-	      try {
-	        for (var _iterator = trips[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	          var trip = _step.value;
-	
-	          var kiosk = extractKiosk(trip);
-	          var kioskName = kiosk.name;
-	
-	          if (!map.has(kioskName)) {
-	            map.set(kioskName, {
-	              'tally': 0,
-	              'LatLng': new L.LatLng(kiosk.lat, kiosk.lon),
-	              'name': kiosk.name
-	            });
-	          }
-	
-	          map.get(kioskName).tally++;
-	        }
-	      } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	      } finally {
-	        try {
-	          if (!_iteratorNormalCompletion && _iterator.return) {
-	            _iterator.return();
-	          }
-	        } finally {
-	          if (_didIteratorError) {
-	            throw _iteratorError;
-	          }
-	        }
-	      }
-	
-	      return Array.from(map.values());
-	    }
-	  }, {
-	    key: "_updatePlot",
-	    value: function _updatePlot(data) {
+	    key: "updatePlot",
+	    value: function updatePlot(data) {
+	      this.svg = (0, _d3Selection.select)("#map").select("svg");
 	      var map = this.props.map;
 	
 	      var points = this.svg.selectAll("circle").data(data, function (d) {
@@ -40552,14 +40593,10 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      if (!this.state) {
-	        return null;
-	      }
-	
 	      if (this.props.toggle === 'checkout') {
-	        this._updatePlot(this.state.checkoutKiosks);
+	        this.updatePlot(this.props.checkoutKiosks);
 	      } else if (this.props.toggle === 'return') {
-	        this._updatePlot(this.state.returnKiosks);
+	        this.updatePlot(this.props.returnKiosks);
 	      }
 	
 	      return null;
@@ -43946,6 +43983,69 @@
 	  Object.defineProperty(exports, '__esModule', { value: true });
 	
 	}));
+
+/***/ },
+/* 284 */
+/*!******************************************!*\
+  !*** ./src/client/app/reducers/trips.js ***!
+  \******************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var trips = function trips() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	    checkoutKiosksTally: [],
+	    returnKiosksTally: []
+	  } : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case 'FETCH_TRIPS':
+	      // TODO handle ui state update (ex. spinner to show loading)
+	      return state;
+	    case 'RECEIVE_TRIPS':
+	      return action.trips;
+	    default:
+	      return state;
+	  }
+	};
+	
+	exports.default = trips;
+
+/***/ },
+/* 285 */
+/*!************************************!*\
+  !*** ./~/redux-thunk/lib/index.js ***!
+  \************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	exports.__esModule = true;
+	function createThunkMiddleware(extraArgument) {
+	  return function (_ref) {
+	    var dispatch = _ref.dispatch;
+	    var getState = _ref.getState;
+	    return function (next) {
+	      return function (action) {
+	        if (typeof action === 'function') {
+	          return action(dispatch, getState, extraArgument);
+	        }
+	
+	        return next(action);
+	      };
+	    };
+	  };
+	}
+	
+	var thunk = createThunkMiddleware();
+	thunk.withExtraArgument = createThunkMiddleware;
+	
+	exports['default'] = thunk;
 
 /***/ }
 /******/ ]);

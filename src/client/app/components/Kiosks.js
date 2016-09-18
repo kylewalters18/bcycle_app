@@ -6,44 +6,11 @@ import { transition } from "d3-transition";
 class Kiosks extends React.Component {
 
   componentDidMount() {
-    fetch('https://bcycle.herokuapp.com/trip')
-    .then((response) => {
-      return response.json();
-    })
-    .then((json) => {
-      let checkoutKiosksTally = this._tallyKiosks(json, function(d) { return d.checkout_kiosk; });
-      let returnKiosksTally = this._tallyKiosks(json, function(d) { return d.return_kiosk; });
-
-      this.svg = select("#map").select("svg");
-      this._updatePlot(checkoutKiosksTally);
-
-      this.setState({
-        checkoutKiosks: checkoutKiosksTally,
-        returnKiosks: returnKiosksTally
-      });
-    });
+    this.props.onInitialize();
   }
 
-  _tallyKiosks(trips, extractKiosk) {
-    let map = new Map();
-    for (let trip of trips) {
-      let kiosk = extractKiosk(trip);
-      let kioskName = kiosk.name;
-
-      if(!map.has(kioskName)) {
-        map.set(kioskName, {
-          'tally': 0,
-          'LatLng': new L.LatLng(kiosk.lat, kiosk.lon),
-          'name': kiosk.name
-        });
-      }
-
-      map.get(kioskName).tally++;
-    }
-    return Array.from(map.values());
-  }
-
-  _updatePlot(data) {
+  updatePlot(data) {
+    this.svg = select("#map").select("svg");
     let map = this.props.map;
 
     let points = this.svg.selectAll("circle").data(data, function(d) { return d.name; });
@@ -80,15 +47,13 @@ class Kiosks extends React.Component {
   }
 
   render() {
-    if (!this.state) { return null; }
+      if (this.props.toggle === 'checkout') {
+        this.updatePlot(this.props.checkoutKiosks)
+      } else if (this.props.toggle === 'return') {
+        this.updatePlot(this.props.returnKiosks)
+      }
 
-    if (this.props.toggle === 'checkout') {
-      this._updatePlot(this.state.checkoutKiosks);
-    } else if (this.props.toggle === 'return') {
-      this._updatePlot(this.state.returnKiosks);
-    }
-
-    return null;
+      return null;
   }
 }
 

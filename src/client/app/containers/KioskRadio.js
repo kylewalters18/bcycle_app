@@ -16,7 +16,7 @@ class KioskRadio extends React.Component {
                  onClick={ () => this.props.dispatch(toggle('checkout'))}>
             Checkout Kiosks
           </Radio>
-          <Radio value="checkout"
+          <Radio value="return"
                  className='mdl-color-text--grey-100'
                  onClick={ () => this.props.dispatch(toggle('return'))}>
             Return Kiosks

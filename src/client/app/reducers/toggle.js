@@ -1,4 +1,4 @@
-const controls = (state = '', action) => {
+const controls = (state = 'checkout', action) => {
   switch (action.type) {
     case 'TOGGLE_RADIO':
       return action.option;

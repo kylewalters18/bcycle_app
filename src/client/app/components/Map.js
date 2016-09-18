@@ -1,6 +1,7 @@
 import React from 'react';
 
 import L from 'leaflet';
+import { select } from 'd3-selection';
 
 import VisibleKiosks from 'containers/Kiosks';
 
