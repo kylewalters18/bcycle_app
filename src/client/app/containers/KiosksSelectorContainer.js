@@ -1,31 +1,27 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { connect } from 'react-redux'
+
 import { toggle } from 'actions'
+import KiosksSelector from 'components/KiosksSelector'
 
-import { RadioGroup, Radio } from 'react-mdl'
 
-class KioskRadio extends React.Component {
-  render() {
-    let input
-
-    return (
-      <RadioGroup value="checkout" name="kiosks">
-          <Radio value="checkout"
-                 className='mdl-color-text--grey-100'
-                 onClick={ () => this.props.dispatch(toggle('checkout'))}>
-            Checkout Kiosks
-          </Radio>
-          <Radio value="return"
-                 className='mdl-color-text--grey-100'
-                 onClick={ () => this.props.dispatch(toggle('return'))}>
-            Return Kiosks
-          </Radio>
-      </RadioGroup>
-    )
+function mapStateToProps(state, ownProps) {
+  return {
+    selection: state.controls
   }
 }
 
-KioskRadio = connect()(KioskRadio)
+function mapDispatchToProps(dispatch) {
+  return {
+    onClick: (kiosk) => dispatch(toggle(kiosk))
+  }
+}
 
-export default KioskRadio
+
+const KiosksSelectorContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(KiosksSelector)
+
+export default KiosksSelectorContainer

@@ -43935,8 +43935,6 @@
 	  value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
 	var _react = __webpack_require__(/*! react */ 1);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -43947,63 +43945,29 @@
 	
 	var _actions = __webpack_require__(/*! actions */ 272);
 	
-	var _reactMdl = __webpack_require__(/*! react-mdl */ 204);
+	var _KiosksSelector = __webpack_require__(/*! components/KiosksSelector */ 288);
+	
+	var _KiosksSelector2 = _interopRequireDefault(_KiosksSelector);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function mapStateToProps(state, ownProps) {
+	  return {
+	    selection: state.controls
+	  };
+	}
 	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var KioskRadio = function (_React$Component) {
-	  _inherits(KioskRadio, _React$Component);
-	
-	  function KioskRadio() {
-	    _classCallCheck(this, KioskRadio);
-	
-	    return _possibleConstructorReturn(this, (KioskRadio.__proto__ || Object.getPrototypeOf(KioskRadio)).apply(this, arguments));
-	  }
-	
-	  _createClass(KioskRadio, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-	
-	      var input = void 0;
-	
-	      return _react2.default.createElement(
-	        _reactMdl.RadioGroup,
-	        { value: 'checkout', name: 'kiosks' },
-	        _react2.default.createElement(
-	          _reactMdl.Radio,
-	          { value: 'checkout',
-	            className: 'mdl-color-text--grey-100',
-	            onClick: function onClick() {
-	              return _this2.props.dispatch((0, _actions.toggle)('checkout'));
-	            } },
-	          'Checkout Kiosks'
-	        ),
-	        _react2.default.createElement(
-	          _reactMdl.Radio,
-	          { value: 'return',
-	            className: 'mdl-color-text--grey-100',
-	            onClick: function onClick() {
-	              return _this2.props.dispatch((0, _actions.toggle)('return'));
-	            } },
-	          'Return Kiosks'
-	        )
-	      );
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    onClick: function onClick(kiosk) {
+	      return dispatch((0, _actions.toggle)(kiosk));
 	    }
-	  }]);
+	  };
+	}
 	
-	  return KioskRadio;
-	}(_react2.default.Component);
+	var KiosksSelectorContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_KiosksSelector2.default);
 	
-	KioskRadio = (0, _reactRedux.connect)()(KioskRadio);
-	
-	exports.default = KioskRadio;
+	exports.default = KiosksSelectorContainer;
 
 /***/ },
 /* 287 */
@@ -44048,6 +44012,85 @@
 	var KiosksContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Kiosks2.default);
 	
 	exports.default = KiosksContainer;
+
+/***/ },
+/* 288 */
+/*!*****************************************************!*\
+  !*** ./src/client/app/components/KiosksSelector.js ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 172);
+	
+	var _reactMdl = __webpack_require__(/*! react-mdl */ 204);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var KiosksSelector = function (_React$Component) {
+	  _inherits(KiosksSelector, _React$Component);
+	
+	  function KiosksSelector() {
+	    _classCallCheck(this, KiosksSelector);
+	
+	    return _possibleConstructorReturn(this, (KiosksSelector.__proto__ || Object.getPrototypeOf(KiosksSelector)).apply(this, arguments));
+	  }
+	
+	  _createClass(KiosksSelector, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      var input = void 0;
+	
+	      return _react2.default.createElement(
+	        _reactMdl.RadioGroup,
+	        { value: this.props.selection, name: 'kiosks' },
+	        _react2.default.createElement(
+	          _reactMdl.Radio,
+	          { value: 'checkout',
+	            className: 'mdl-color-text--grey-100',
+	            onClick: function onClick() {
+	              return _this2.props.onClick('checkout');
+	            } },
+	          'Checkout Kiosks'
+	        ),
+	        _react2.default.createElement(
+	          _reactMdl.Radio,
+	          { value: 'return',
+	            className: 'mdl-color-text--grey-100',
+	            onClick: function onClick() {
+	              return _this2.props.onClick('return');
+	            } },
+	          'Return Kiosks'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return KiosksSelector;
+	}(_react2.default.Component);
+	
+	exports.default = KiosksSelector;
 
 /***/ }
 /******/ ]);
