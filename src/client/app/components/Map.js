@@ -3,7 +3,7 @@ import React from 'react';
 import L from 'leaflet';
 import { select } from 'd3-selection';
 
-import VisibleKiosks from 'containers/Kiosks';
+import KiosksContainer from 'containers/KiosksContainer';
 
 class Map extends React.Component {
 
@@ -28,7 +28,7 @@ class Map extends React.Component {
   render() {
     return (
       <div id="map" style={{height: 'calc(100% - 32px)'}}>
-        <VisibleKiosks map={ this.map } />
+        <KiosksContainer map={ this.map } />
       </div>
     );
   }

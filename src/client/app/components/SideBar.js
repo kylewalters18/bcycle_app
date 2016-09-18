@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 
 import { Grid, Cell } from 'react-mdl';
 
-import KioskRadio from 'containers/KioskRadio';
+import KiosksSelectorContainer from 'containers/KiosksSelectorContainer';
 
 class SideBar extends React.Component {
 	render() {
@@ -16,7 +16,7 @@ class SideBar extends React.Component {
 				</Cell>
 				<Cell col={12} className="mdl-layout-spacer"/>
 				<Cell col={12}>
-					<KioskRadio />
+					<KiosksSelectorContainer />
 				</Cell>
 			</Grid>
 		)

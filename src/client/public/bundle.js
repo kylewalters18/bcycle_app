@@ -30979,9 +30979,9 @@
 	
 	var _reactMdl = __webpack_require__(/*! react-mdl */ 204);
 	
-	var _KioskRadio = __webpack_require__(/*! containers/KioskRadio */ 271);
+	var _KiosksSelectorContainer = __webpack_require__(/*! containers/KiosksSelectorContainer */ 286);
 	
-	var _KioskRadio2 = _interopRequireDefault(_KioskRadio);
+	var _KiosksSelectorContainer2 = _interopRequireDefault(_KiosksSelectorContainer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -31019,7 +31019,7 @@
 					_react2.default.createElement(
 						_reactMdl.Cell,
 						{ col: 12 },
-						_react2.default.createElement(_KioskRadio2.default, null)
+						_react2.default.createElement(_KiosksSelectorContainer2.default, null)
 					)
 				);
 			}
@@ -31031,89 +31031,7 @@
 	exports.default = SideBar;
 
 /***/ },
-/* 271 */
-/*!*************************************************!*\
-  !*** ./src/client/app/containers/KioskRadio.js ***!
-  \*************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(/*! react-dom */ 34);
-	
-	var _reactRedux = __webpack_require__(/*! react-redux */ 172);
-	
-	var _actions = __webpack_require__(/*! actions */ 272);
-	
-	var _reactMdl = __webpack_require__(/*! react-mdl */ 204);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var KioskRadio = function (_React$Component) {
-	  _inherits(KioskRadio, _React$Component);
-	
-	  function KioskRadio() {
-	    _classCallCheck(this, KioskRadio);
-	
-	    return _possibleConstructorReturn(this, (KioskRadio.__proto__ || Object.getPrototypeOf(KioskRadio)).apply(this, arguments));
-	  }
-	
-	  _createClass(KioskRadio, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-	
-	      var input = void 0;
-	
-	      return _react2.default.createElement(
-	        _reactMdl.RadioGroup,
-	        { value: 'checkout', name: 'kiosks' },
-	        _react2.default.createElement(
-	          _reactMdl.Radio,
-	          { value: 'checkout',
-	            className: 'mdl-color-text--grey-100',
-	            onClick: function onClick() {
-	              return _this2.props.dispatch((0, _actions.toggle)('checkout'));
-	            } },
-	          'Checkout Kiosks'
-	        ),
-	        _react2.default.createElement(
-	          _reactMdl.Radio,
-	          { value: 'return',
-	            className: 'mdl-color-text--grey-100',
-	            onClick: function onClick() {
-	              return _this2.props.dispatch((0, _actions.toggle)('return'));
-	            } },
-	          'Return Kiosks'
-	        )
-	      );
-	    }
-	  }]);
-	
-	  return KioskRadio;
-	}(_react2.default.Component);
-	
-	KioskRadio = (0, _reactRedux.connect)()(KioskRadio);
-	
-	exports.default = KioskRadio;
-
-/***/ },
+/* 271 */,
 /* 272 */
 /*!*****************************************!*\
   !*** ./src/client/app/actions/index.js ***!
@@ -31238,9 +31156,9 @@
 	
 	var _d3Selection = __webpack_require__(/*! d3-selection */ 277);
 	
-	var _Kiosks = __webpack_require__(/*! containers/Kiosks */ 275);
+	var _KiosksContainer = __webpack_require__(/*! containers/KiosksContainer */ 287);
 	
-	var _Kiosks2 = _interopRequireDefault(_Kiosks);
+	var _KiosksContainer2 = _interopRequireDefault(_KiosksContainer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -31286,7 +31204,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { id: 'map', style: { height: 'calc(100% - 32px)' } },
-	        _react2.default.createElement(_Kiosks2.default, { map: this.map })
+	        _react2.default.createElement(_KiosksContainer2.default, { map: this.map })
 	      );
 	    }
 	  }]);
@@ -40473,50 +40391,7 @@
 	}(window, document));
 
 /***/ },
-/* 275 */
-/*!*********************************************!*\
-  !*** ./src/client/app/containers/Kiosks.js ***!
-  \*********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _reactRedux = __webpack_require__(/*! react-redux */ 172);
-	
-	var _actions = __webpack_require__(/*! actions */ 272);
-	
-	var _Kiosks = __webpack_require__(/*! components/Kiosks */ 276);
-	
-	var _Kiosks2 = _interopRequireDefault(_Kiosks);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function mapStateToProps(state, ownProps) {
-	  return {
-	    toggle: state.controls,
-	    checkoutKiosks: state.trips.checkoutKiosksTally,
-	    returnKiosks: state.trips.returnKiosksTally,
-	    map: ownProps.map
-	  };
-	}
-	
-	function mapDispatchToProps(dispatch) {
-	  return {
-	    onInitialize: function onInitialize() {
-	      return dispatch((0, _actions.fetchTripsAsync)());
-	    }
-	  };
-	}
-	
-	var VisibleKiosks = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Kiosks2.default);
-	
-	exports.default = VisibleKiosks;
-
-/***/ },
+/* 275 */,
 /* 276 */
 /*!*********************************************!*\
   !*** ./src/client/app/components/Kiosks.js ***!
@@ -44046,6 +43921,133 @@
 	thunk.withExtraArgument = createThunkMiddleware;
 	
 	exports['default'] = thunk;
+
+/***/ },
+/* 286 */
+/*!**************************************************************!*\
+  !*** ./src/client/app/containers/KiosksSelectorContainer.js ***!
+  \**************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 172);
+	
+	var _actions = __webpack_require__(/*! actions */ 272);
+	
+	var _reactMdl = __webpack_require__(/*! react-mdl */ 204);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var KioskRadio = function (_React$Component) {
+	  _inherits(KioskRadio, _React$Component);
+	
+	  function KioskRadio() {
+	    _classCallCheck(this, KioskRadio);
+	
+	    return _possibleConstructorReturn(this, (KioskRadio.__proto__ || Object.getPrototypeOf(KioskRadio)).apply(this, arguments));
+	  }
+	
+	  _createClass(KioskRadio, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      var input = void 0;
+	
+	      return _react2.default.createElement(
+	        _reactMdl.RadioGroup,
+	        { value: 'checkout', name: 'kiosks' },
+	        _react2.default.createElement(
+	          _reactMdl.Radio,
+	          { value: 'checkout',
+	            className: 'mdl-color-text--grey-100',
+	            onClick: function onClick() {
+	              return _this2.props.dispatch((0, _actions.toggle)('checkout'));
+	            } },
+	          'Checkout Kiosks'
+	        ),
+	        _react2.default.createElement(
+	          _reactMdl.Radio,
+	          { value: 'return',
+	            className: 'mdl-color-text--grey-100',
+	            onClick: function onClick() {
+	              return _this2.props.dispatch((0, _actions.toggle)('return'));
+	            } },
+	          'Return Kiosks'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return KioskRadio;
+	}(_react2.default.Component);
+	
+	KioskRadio = (0, _reactRedux.connect)()(KioskRadio);
+	
+	exports.default = KioskRadio;
+
+/***/ },
+/* 287 */
+/*!******************************************************!*\
+  !*** ./src/client/app/containers/KiosksContainer.js ***!
+  \******************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 172);
+	
+	var _actions = __webpack_require__(/*! actions */ 272);
+	
+	var _Kiosks = __webpack_require__(/*! components/Kiosks */ 276);
+	
+	var _Kiosks2 = _interopRequireDefault(_Kiosks);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function mapStateToProps(state, ownProps) {
+	  return {
+	    toggle: state.controls,
+	    checkoutKiosks: state.trips.checkoutKiosksTally,
+	    returnKiosks: state.trips.returnKiosksTally,
+	    map: ownProps.map
+	  };
+	}
+	
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    onInitialize: function onInitialize() {
+	      return dispatch((0, _actions.fetchTripsAsync)());
+	    }
+	  };
+	}
+	
+	var KiosksContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Kiosks2.default);
+	
+	exports.default = KiosksContainer;
 
 /***/ }
 /******/ ]);

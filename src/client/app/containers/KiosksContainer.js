@@ -18,9 +18,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-const VisibleKiosks = connect(
+const KiosksContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Kiosks)
 
-export default VisibleKiosks
+export default KiosksContainer
