@@ -5,10 +5,6 @@ import { transition } from "d3-transition";
 
 class Kiosks extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     fetch('https://bcycle.herokuapp.com/trip')
     .then((response) => {
@@ -86,9 +82,9 @@ class Kiosks extends React.Component {
   render() {
     if (!this.state) { return null; }
 
-    if (this.props.toggle) {
+    if (this.props.toggle === 'checkout') {
       this._updatePlot(this.state.checkoutKiosks);
-    } else {
+    } else if (this.props.toggle === 'return') {
       this._updatePlot(this.state.returnKiosks);
     }
 

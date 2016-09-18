@@ -2,13 +2,9 @@ import React from 'react';
 
 import L from 'leaflet';
 
-import Kiosks from 'kiosks';
+import VisibleKiosks from 'containers/Kiosks';
 
 class Map extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
     var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
@@ -31,8 +27,7 @@ class Map extends React.Component {
   render() {
     return (
       <div id="map" style={{height: 'calc(100% - 32px)'}}>
-        <Kiosks map={this.map}
-                toggle = { this.props.toggle } />
+        <VisibleKiosks map={ this.map } />
       </div>
     );
   }
