@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { Grid, Cell } from 'react-mdl';
 
 import SideBar from 'components/SideBar';
-import Map from 'components/Map';
+import MapContainer from 'containers/MapContainer';
 
 
 class App extends React.Component {
@@ -16,7 +16,7 @@ class App extends React.Component {
 						<SideBar />
 					</Cell>
 					<Cell col={7}>
-						<Map />
+						<MapContainer />
 					</Cell>
 				</Grid>
 			</div>

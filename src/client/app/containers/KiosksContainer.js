@@ -7,6 +7,7 @@ function mapStateToProps(state, ownProps) {
     toggle: state.controls,
     checkoutKiosks: state.trips.checkoutKiosksTally,
     returnKiosks: state.trips.returnKiosksTally,
+    zoom: state.zoom,
     map: ownProps.map
   }
 }

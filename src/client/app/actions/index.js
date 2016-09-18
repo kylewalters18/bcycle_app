@@ -1,15 +1,22 @@
 export function toggle(option) {
-  return {
-    type: 'TOGGLE_RADIO',
-    option
-  }
+  	return {
+  	  	type: 'TOGGLE_RADIO',
+  	  	option
+  	}
+}
+
+export function zoom(level) {
+	return {
+		type: 'ZOOM',
+		level
+	}
 }
 
 export function fetchTripsSync(text) {
-  return {
-    type: 'FETCH_TRIPS',
-    text
-  }
+  	return {
+    	type: 'FETCH_TRIPS',
+    	text
+  	}
 }
 
 export function receiveTrips(trips) {

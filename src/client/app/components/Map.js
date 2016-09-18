@@ -14,14 +14,14 @@ class Map extends React.Component {
       }
     );
 
-    var map = L.map('map', { scrollWheelZoom: false, center: [39.7392, -104.9903], zoom: 13 });
+    var map = L.map('map', { scrollWheelZoom: false, center: [39.7392, -104.9903], zoom: this.props.zoom });
     map.addLayer(layer);
 
     /* Initialize the SVG layer */
     map._initPathRoot()
-    this.map = map;
+    map.on("viewreset", () => this.props.onZoom(map.getZoom()));
 
-    this.map.on("viewreset", () => this.forceUpdate());
+    this.map = map;
     this.forceUpdate();
   }
 

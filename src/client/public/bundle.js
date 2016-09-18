@@ -23848,11 +23848,16 @@
 	
 	var _trips2 = _interopRequireDefault(_trips);
 	
+	var _zoom = __webpack_require__(/*! reducers/zoom */ 290);
+	
+	var _zoom2 = _interopRequireDefault(_zoom);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var reducer = (0, _redux.combineReducers)({
 	  controls: _toggle2.default,
-	  trips: _trips2.default
+	  trips: _trips2.default,
+	  zoom: _zoom2.default
 	});
 	
 	exports.default = reducer;
@@ -23910,9 +23915,9 @@
 	
 	var _SideBar2 = _interopRequireDefault(_SideBar);
 	
-	var _Map = __webpack_require__(/*! components/Map */ 273);
+	var _MapContainer = __webpack_require__(/*! containers/MapContainer */ 289);
 	
-	var _Map2 = _interopRequireDefault(_Map);
+	var _MapContainer2 = _interopRequireDefault(_MapContainer);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -23948,7 +23953,7 @@
 						_react2.default.createElement(
 							_reactMdl.Cell,
 							{ col: 7 },
-							_react2.default.createElement(_Map2.default, null)
+							_react2.default.createElement(_MapContainer2.default, null)
 						)
 					)
 				);
@@ -31044,6 +31049,7 @@
 		value: true
 	});
 	exports.toggle = toggle;
+	exports.zoom = zoom;
 	exports.fetchTripsSync = fetchTripsSync;
 	exports.receiveTrips = receiveTrips;
 	exports.fetchTripsAsync = fetchTripsAsync;
@@ -31051,6 +31057,13 @@
 		return {
 			type: 'TOGGLE_RADIO',
 			option: option
+		};
+	}
+	
+	function zoom(level) {
+		return {
+			type: 'ZOOM',
+			level: level
 		};
 	}
 	
@@ -31186,16 +31199,16 @@
 	        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CARTO</a>'
 	      });
 	
-	      var map = _leaflet2.default.map('map', { scrollWheelZoom: false, center: [39.7392, -104.9903], zoom: 13 });
+	      var map = _leaflet2.default.map('map', { scrollWheelZoom: false, center: [39.7392, -104.9903], zoom: this.props.zoom });
 	      map.addLayer(layer);
 	
 	      /* Initialize the SVG layer */
 	      map._initPathRoot();
-	      this.map = map;
-	
-	      this.map.on("viewreset", function () {
-	        return _this2.forceUpdate();
+	      map.on("viewreset", function () {
+	        return _this2.props.onZoom(map.getZoom());
 	      });
+	
+	      this.map = map;
 	      this.forceUpdate();
 	    }
 	  }, {
@@ -40468,6 +40481,7 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
+	      console.log(this.props);
 	      if (this.props.toggle === 'checkout') {
 	        this.updatePlot(this.props.checkoutKiosks);
 	      } else if (this.props.toggle === 'return') {
@@ -43997,6 +44011,7 @@
 	    toggle: state.controls,
 	    checkoutKiosks: state.trips.checkoutKiosksTally,
 	    returnKiosks: state.trips.returnKiosksTally,
+	    zoom: state.zoom,
 	    map: ownProps.map
 	  };
 	}
@@ -44091,6 +44106,73 @@
 	}(_react2.default.Component);
 	
 	exports.default = KiosksSelector;
+
+/***/ },
+/* 289 */
+/*!***************************************************!*\
+  !*** ./src/client/app/containers/MapContainer.js ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 172);
+	
+	var _actions = __webpack_require__(/*! actions */ 272);
+	
+	var _Map = __webpack_require__(/*! components/Map */ 273);
+	
+	var _Map2 = _interopRequireDefault(_Map);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function mapStateToProps(state, ownProps) {
+	  return {
+	    zoom: state.zoom
+	  };
+	}
+	
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    onZoom: function onZoom(level) {
+	      return dispatch((0, _actions.zoom)(level));
+	    }
+	  };
+	}
+	
+	var MapContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Map2.default);
+	
+	exports.default = MapContainer;
+
+/***/ },
+/* 290 */
+/*!*****************************************!*\
+  !*** ./src/client/app/reducers/zoom.js ***!
+  \*****************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var zoom = function zoom() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? 13 : arguments[0];
+	  var action = arguments[1];
+	
+	  switch (action.type) {
+	    case 'ZOOM':
+	      return action.level;
+	    default:
+	      return state;
+	  }
+	};
+	
+	exports.default = zoom;
 
 /***/ }
 /******/ ]);
