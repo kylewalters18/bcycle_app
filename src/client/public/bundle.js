@@ -40481,7 +40481,6 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      console.log(this.props);
 	      if (this.props.toggle === 'checkout') {
 	        this.updatePlot(this.props.checkoutKiosks);
 	      } else if (this.props.toggle === 'return') {
