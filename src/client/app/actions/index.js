@@ -28,6 +28,20 @@ export function receiveTrips(trips) {
 	}
 }
 
+export function updateStartTime(time) {
+	return {
+		type: 'START_TIME',
+		time
+	}
+}
+
+export function updateEndTime(time) {
+	return {
+		type: 'END_TIME',
+		time
+	}
+}
+
 export function fetchTripsAsync(text) {
 	return function(dispatch) {
 		// dispatch the sync action to update ui
@@ -35,31 +49,6 @@ export function fetchTripsAsync(text) {
 
 		// async call to get the new data
 		axios('https://bcycle.herokuapp.com/trip')
-		    .then((response) => {
-		    	let trips = {
-					checkoutKiosksTally: tallyKiosks(response.data, (d) => d.checkout_kiosk),
-		      		returnKiosksTally: tallyKiosks(response.data, (d) => d.return_kiosk)
-		    	}
-		  		dispatch(receiveTrips(trips))
-		    });
+		    .then((response) => { dispatch(receiveTrips(response.data)) });
 	}
-}
-
-function tallyKiosks(trips, extractKiosk) {
-	let map = new Map();
-	for (let trip of trips) {
-	  let kiosk = extractKiosk(trip)
-	  let kioskName = kiosk.name
-
-	  if(!map.has(kioskName)) {
-	    map.set(kioskName, {
-	      'tally': 0,
-	      'LatLng': new L.LatLng(kiosk.lat, kiosk.lon),
-	      'name': kiosk.name
-	    });
-	  }
-
-	  map.get(kioskName).tally++
-	}
-	return Array.from(map.values())
 }

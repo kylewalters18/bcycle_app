@@ -32,7 +32,6 @@ class Kiosks extends React.Component {
         .attr("transform", function(d) {
             return "translate("+ map.latLngToLayerPoint(d.LatLng).x + ","+ map.latLngToLayerPoint(d.LatLng).y + ")";
         })
-        .on('click', function(d) { select(this).style("fill", "rgb(33, 150, 243)"); })
       .transition().duration(500)
         .style("opacity", .6)
         .style("fill", "rgb(255, 87, 34)")

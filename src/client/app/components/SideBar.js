@@ -1,9 +1,10 @@
-import React from 'react';
-import { render } from 'react-dom';
+import React from 'react'
+import { render } from 'react-dom'
 
-import { Grid, Cell } from 'react-mdl';
+import { Grid, Cell } from 'react-mdl'
 
-import KiosksSelectorContainer from 'containers/KiosksSelectorContainer';
+import KiosksSelectorContainer from 'containers/KiosksSelectorContainer'
+import TimelineContainer from 'containers/TimelineContainer'
 
 class SideBar extends React.Component {
 	render() {
@@ -17,6 +18,7 @@ class SideBar extends React.Component {
 				<Cell col={12} className="mdl-layout-spacer"/>
 				<Cell col={12}>
 					<KiosksSelectorContainer />
+					<TimelineContainer />
 				</Cell>
 			</Grid>
 		)

@@ -30988,6 +30988,10 @@
 	
 	var _KiosksSelectorContainer2 = _interopRequireDefault(_KiosksSelectorContainer);
 	
+	var _TimelineContainer = __webpack_require__(/*! containers/TimelineContainer */ 713);
+	
+	var _TimelineContainer2 = _interopRequireDefault(_TimelineContainer);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -31024,7 +31028,8 @@
 					_react2.default.createElement(
 						_reactMdl.Cell,
 						{ col: 12 },
-						_react2.default.createElement(_KiosksSelectorContainer2.default, null)
+						_react2.default.createElement(_KiosksSelectorContainer2.default, null),
+						_react2.default.createElement(_TimelineContainer2.default, null)
 					)
 				);
 			}
@@ -31052,6 +31057,8 @@
 	exports.zoom = zoom;
 	exports.fetchTripsSync = fetchTripsSync;
 	exports.receiveTrips = receiveTrips;
+	exports.updateStartTime = updateStartTime;
+	exports.updateEndTime = updateEndTime;
 	exports.fetchTripsAsync = fetchTripsAsync;
 	
 	var _axios = __webpack_require__(/*! axios */ 291);
@@ -31088,6 +31095,20 @@
 		};
 	}
 	
+	function updateStartTime(time) {
+		return {
+			type: 'START_TIME',
+			time: time
+		};
+	}
+	
+	function updateEndTime(time) {
+		return {
+			type: 'END_TIME',
+			time: time
+		};
+	}
+	
 	function fetchTripsAsync(text) {
 		return function (dispatch) {
 			// dispatch the sync action to update ui
@@ -31095,58 +31116,9 @@
 	
 			// async call to get the new data
 			(0, _axios2.default)('https://bcycle.herokuapp.com/trip').then(function (response) {
-				var trips = {
-					checkoutKiosksTally: tallyKiosks(response.data, function (d) {
-						return d.checkout_kiosk;
-					}),
-					returnKiosksTally: tallyKiosks(response.data, function (d) {
-						return d.return_kiosk;
-					})
-				};
-				dispatch(receiveTrips(trips));
+				dispatch(receiveTrips(response.data));
 			});
 		};
-	}
-	
-	function tallyKiosks(trips, extractKiosk) {
-		var map = new Map();
-		var _iteratorNormalCompletion = true;
-		var _didIteratorError = false;
-		var _iteratorError = undefined;
-	
-		try {
-			for (var _iterator = trips[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-				var trip = _step.value;
-	
-				var kiosk = extractKiosk(trip);
-				var kioskName = kiosk.name;
-	
-				if (!map.has(kioskName)) {
-					map.set(kioskName, {
-						'tally': 0,
-						'LatLng': new L.LatLng(kiosk.lat, kiosk.lon),
-						'name': kiosk.name
-					});
-				}
-	
-				map.get(kioskName).tally++;
-			}
-		} catch (err) {
-			_didIteratorError = true;
-			_iteratorError = err;
-		} finally {
-			try {
-				if (!_iteratorNormalCompletion && _iterator.return) {
-					_iterator.return();
-				}
-			} finally {
-				if (_didIteratorError) {
-					throw _iteratorError;
-				}
-			}
-		}
-	
-		return Array.from(map.values());
 	}
 
 /***/ },
@@ -40474,8 +40446,6 @@
 	      // Update section
 	      points.attr("transform", function (d) {
 	        return "translate(" + map.latLngToLayerPoint(d.LatLng).x + "," + map.latLngToLayerPoint(d.LatLng).y + ")";
-	      }).on('click', function (d) {
-	        (0, _d3Selection.select)(this).style("fill", "rgb(33, 150, 243)");
 	      }).transition().duration(500).style("opacity", .6).style("fill", "rgb(255, 87, 34)").attr("r", function (d) {
 	        return d.tally;
 	      });
@@ -43891,6 +43861,10 @@
 	});
 	var trips = function trips() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? {
+	    start: 1,
+	    end: 12,
+	    allTrips: [],
+	    visibleTrips: [],
 	    checkoutKiosksTally: [],
 	    returnKiosksTally: []
 	  } : arguments[0];
@@ -43901,11 +43875,116 @@
 	      // TODO handle ui state update (ex. spinner to show loading)
 	      return state;
 	    case 'RECEIVE_TRIPS':
-	      return action.trips;
+	      return {
+	        allTrips: action.trips,
+	        visibleTrips: action.trips,
+	        checkoutKiosksTally: tallyKiosks(action.trips, function (d) {
+	          return d.checkout_kiosk;
+	        }),
+	        returnKiosksTally: tallyKiosks(action.trips, function (d) {
+	          return d.return_kiosk;
+	        })
+	      };
+	    case 'START_TIME':
+	      return Object.assign({}, state, {
+	        start: action.time,
+	        checkoutKiosksTally: tallyKiosks(filterTrips(state.allTrips, state.start, action.time), function (d) {
+	          return d.checkout_kiosk;
+	        }),
+	        returnKiosksTally: tallyKiosks(filterTrips(state.allTrips, state.start, action.time), function (d) {
+	          return d.return_kiosk;
+	        })
+	      });
+	    case 'END_TIME':
+	      return Object.assign({}, state, {
+	        end: action.time,
+	        checkoutKiosksTally: tallyKiosks(filterTrips(state.allTrips, state.start, action.time), function (d) {
+	          return d.checkout_kiosk;
+	        }),
+	        returnKiosksTally: tallyKiosks(filterTrips(state.allTrips, state.start, action.time), function (d) {
+	          return d.return_kiosk;
+	        })
+	      });
 	    default:
 	      return state;
 	  }
 	};
+	
+	function filterTrips(trips, start, end) {
+	  var filteredTrips = [];
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+	
+	  try {
+	    for (var _iterator = trips[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var trip = _step.value;
+	
+	      var checkoutDate = new Date(trip.checkout_datetime);
+	
+	      var month = checkoutDate.getMonth() + 1;
+	      if (month >= start && month <= end) {
+	        filteredTrips.push(trip);
+	      }
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+	
+	  return filteredTrips;
+	}
+	
+	function tallyKiosks(trips, extractKiosk) {
+	  var map = new Map();
+	  var _iteratorNormalCompletion2 = true;
+	  var _didIteratorError2 = false;
+	  var _iteratorError2 = undefined;
+	
+	  try {
+	    for (var _iterator2 = trips[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	      var trip = _step2.value;
+	
+	      var kiosk = extractKiosk(trip);
+	      var kioskName = kiosk.name;
+	
+	      if (!map.has(kioskName)) {
+	        map.set(kioskName, {
+	          'tally': 0,
+	          'LatLng': new L.LatLng(kiosk.lat, kiosk.lon),
+	          'name': kiosk.name
+	        });
+	      }
+	
+	      map.get(kioskName).tally++;
+	    }
+	  } catch (err) {
+	    _didIteratorError2 = true;
+	    _iteratorError2 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	        _iterator2.return();
+	      }
+	    } finally {
+	      if (_didIteratorError2) {
+	        throw _iteratorError2;
+	      }
+	    }
+	  }
+	
+	  return Array.from(map.values());
+	}
 	
 	exports.default = trips;
 
@@ -44083,7 +44162,7 @@
 	
 	      return _react2.default.createElement(
 	        _reactMdl.RadioGroup,
-	        { value: this.props.selection, name: 'kiosks' },
+	        { value: this.props.selection, name: 'kiosks', container: 'ul', childContainer: 'li' },
 	        _react2.default.createElement(
 	          _reactMdl.Radio,
 	          { value: 'checkout',
@@ -45587,6 +45666,529 @@
 	  };
 	};
 
+
+/***/ },
+/* 313 */,
+/* 314 */,
+/* 315 */,
+/* 316 */,
+/* 317 */,
+/* 318 */,
+/* 319 */,
+/* 320 */,
+/* 321 */,
+/* 322 */,
+/* 323 */,
+/* 324 */,
+/* 325 */,
+/* 326 */,
+/* 327 */,
+/* 328 */,
+/* 329 */,
+/* 330 */,
+/* 331 */,
+/* 332 */,
+/* 333 */,
+/* 334 */,
+/* 335 */,
+/* 336 */,
+/* 337 */,
+/* 338 */,
+/* 339 */,
+/* 340 */,
+/* 341 */,
+/* 342 */,
+/* 343 */,
+/* 344 */,
+/* 345 */,
+/* 346 */,
+/* 347 */,
+/* 348 */,
+/* 349 */,
+/* 350 */,
+/* 351 */,
+/* 352 */,
+/* 353 */,
+/* 354 */,
+/* 355 */,
+/* 356 */,
+/* 357 */,
+/* 358 */,
+/* 359 */,
+/* 360 */,
+/* 361 */,
+/* 362 */,
+/* 363 */,
+/* 364 */,
+/* 365 */,
+/* 366 */,
+/* 367 */,
+/* 368 */,
+/* 369 */,
+/* 370 */,
+/* 371 */,
+/* 372 */,
+/* 373 */,
+/* 374 */,
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */,
+/* 392 */,
+/* 393 */,
+/* 394 */,
+/* 395 */,
+/* 396 */,
+/* 397 */,
+/* 398 */,
+/* 399 */,
+/* 400 */,
+/* 401 */,
+/* 402 */,
+/* 403 */,
+/* 404 */,
+/* 405 */,
+/* 406 */,
+/* 407 */,
+/* 408 */,
+/* 409 */,
+/* 410 */,
+/* 411 */,
+/* 412 */,
+/* 413 */,
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */,
+/* 418 */,
+/* 419 */,
+/* 420 */,
+/* 421 */,
+/* 422 */,
+/* 423 */,
+/* 424 */,
+/* 425 */,
+/* 426 */,
+/* 427 */,
+/* 428 */,
+/* 429 */,
+/* 430 */,
+/* 431 */,
+/* 432 */,
+/* 433 */,
+/* 434 */,
+/* 435 */,
+/* 436 */,
+/* 437 */,
+/* 438 */,
+/* 439 */,
+/* 440 */,
+/* 441 */,
+/* 442 */,
+/* 443 */,
+/* 444 */,
+/* 445 */,
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */,
+/* 464 */,
+/* 465 */,
+/* 466 */,
+/* 467 */,
+/* 468 */,
+/* 469 */,
+/* 470 */,
+/* 471 */,
+/* 472 */,
+/* 473 */,
+/* 474 */,
+/* 475 */,
+/* 476 */,
+/* 477 */,
+/* 478 */,
+/* 479 */,
+/* 480 */,
+/* 481 */,
+/* 482 */,
+/* 483 */,
+/* 484 */,
+/* 485 */,
+/* 486 */,
+/* 487 */,
+/* 488 */,
+/* 489 */,
+/* 490 */,
+/* 491 */,
+/* 492 */,
+/* 493 */,
+/* 494 */,
+/* 495 */,
+/* 496 */,
+/* 497 */,
+/* 498 */,
+/* 499 */,
+/* 500 */,
+/* 501 */,
+/* 502 */,
+/* 503 */,
+/* 504 */,
+/* 505 */,
+/* 506 */,
+/* 507 */,
+/* 508 */,
+/* 509 */,
+/* 510 */,
+/* 511 */,
+/* 512 */,
+/* 513 */,
+/* 514 */,
+/* 515 */,
+/* 516 */,
+/* 517 */,
+/* 518 */,
+/* 519 */,
+/* 520 */,
+/* 521 */,
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */,
+/* 527 */,
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */,
+/* 532 */,
+/* 533 */,
+/* 534 */,
+/* 535 */,
+/* 536 */,
+/* 537 */,
+/* 538 */,
+/* 539 */,
+/* 540 */,
+/* 541 */,
+/* 542 */,
+/* 543 */,
+/* 544 */,
+/* 545 */,
+/* 546 */,
+/* 547 */,
+/* 548 */,
+/* 549 */,
+/* 550 */,
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */,
+/* 556 */,
+/* 557 */,
+/* 558 */,
+/* 559 */,
+/* 560 */,
+/* 561 */,
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */,
+/* 567 */,
+/* 568 */,
+/* 569 */,
+/* 570 */,
+/* 571 */,
+/* 572 */,
+/* 573 */,
+/* 574 */,
+/* 575 */,
+/* 576 */,
+/* 577 */,
+/* 578 */,
+/* 579 */,
+/* 580 */,
+/* 581 */,
+/* 582 */,
+/* 583 */,
+/* 584 */,
+/* 585 */,
+/* 586 */,
+/* 587 */,
+/* 588 */,
+/* 589 */,
+/* 590 */,
+/* 591 */,
+/* 592 */,
+/* 593 */,
+/* 594 */,
+/* 595 */,
+/* 596 */,
+/* 597 */,
+/* 598 */,
+/* 599 */,
+/* 600 */,
+/* 601 */,
+/* 602 */,
+/* 603 */,
+/* 604 */,
+/* 605 */,
+/* 606 */,
+/* 607 */,
+/* 608 */,
+/* 609 */,
+/* 610 */,
+/* 611 */,
+/* 612 */,
+/* 613 */,
+/* 614 */,
+/* 615 */,
+/* 616 */,
+/* 617 */,
+/* 618 */,
+/* 619 */,
+/* 620 */,
+/* 621 */,
+/* 622 */,
+/* 623 */,
+/* 624 */,
+/* 625 */,
+/* 626 */,
+/* 627 */,
+/* 628 */,
+/* 629 */,
+/* 630 */,
+/* 631 */,
+/* 632 */,
+/* 633 */,
+/* 634 */,
+/* 635 */,
+/* 636 */,
+/* 637 */,
+/* 638 */,
+/* 639 */,
+/* 640 */,
+/* 641 */,
+/* 642 */,
+/* 643 */,
+/* 644 */,
+/* 645 */,
+/* 646 */,
+/* 647 */,
+/* 648 */,
+/* 649 */,
+/* 650 */,
+/* 651 */,
+/* 652 */,
+/* 653 */,
+/* 654 */,
+/* 655 */,
+/* 656 */,
+/* 657 */,
+/* 658 */,
+/* 659 */,
+/* 660 */,
+/* 661 */,
+/* 662 */,
+/* 663 */,
+/* 664 */,
+/* 665 */,
+/* 666 */,
+/* 667 */,
+/* 668 */,
+/* 669 */,
+/* 670 */,
+/* 671 */,
+/* 672 */,
+/* 673 */,
+/* 674 */,
+/* 675 */,
+/* 676 */,
+/* 677 */,
+/* 678 */,
+/* 679 */,
+/* 680 */,
+/* 681 */,
+/* 682 */,
+/* 683 */,
+/* 684 */,
+/* 685 */,
+/* 686 */,
+/* 687 */,
+/* 688 */,
+/* 689 */,
+/* 690 */,
+/* 691 */,
+/* 692 */,
+/* 693 */,
+/* 694 */,
+/* 695 */,
+/* 696 */,
+/* 697 */,
+/* 698 */,
+/* 699 */,
+/* 700 */,
+/* 701 */,
+/* 702 */,
+/* 703 */,
+/* 704 */,
+/* 705 */,
+/* 706 */,
+/* 707 */,
+/* 708 */,
+/* 709 */,
+/* 710 */,
+/* 711 */
+/*!***********************************************!*\
+  !*** ./src/client/app/components/Timeline.js ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	var _reactMdl = __webpack_require__(/*! react-mdl */ 204);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Timeline = function (_React$Component) {
+		_inherits(Timeline, _React$Component);
+	
+		function Timeline() {
+			_classCallCheck(this, Timeline);
+	
+			return _possibleConstructorReturn(this, (Timeline.__proto__ || Object.getPrototypeOf(Timeline)).apply(this, arguments));
+		}
+	
+		_createClass(Timeline, [{
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+	
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement(_reactMdl.Textfield, _defineProperty({
+						onChange: function onChange() {},
+						pattern: '-?[0-9]*(\\.[0-9]+)?',
+						error: 'Input is not a number!',
+						label: 'Start...',
+						floatingLabel: true,
+						className: 'mdl-color-text--grey-100'
+					}, 'onChange', function onChange(event) {
+						return _this2.props.updateStart(event.target.value);
+					})),
+					_react2.default.createElement(_reactMdl.Textfield, _defineProperty({
+						onChange: function onChange() {},
+						pattern: '-?[0-9]*(\\.[0-9]+)?',
+						error: 'Input is not a number!',
+						label: 'End...',
+						floatingLabel: true,
+						className: 'mdl-color-text--grey-100'
+					}, 'onChange', function onChange(event) {
+						return _this2.props.updateEnd(event.target.value);
+					}))
+				);
+			}
+		}]);
+	
+		return Timeline;
+	}(_react2.default.Component);
+	
+	exports.default = Timeline;
+
+/***/ },
+/* 712 */,
+/* 713 */
+/*!********************************************************!*\
+  !*** ./src/client/app/containers/TimelineContainer.js ***!
+  \********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 172);
+	
+	var _actions = __webpack_require__(/*! actions */ 272);
+	
+	var _Timeline = __webpack_require__(/*! components/Timeline */ 711);
+	
+	var _Timeline2 = _interopRequireDefault(_Timeline);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function mapStateToProps(state, ownProps) {
+	  return {
+	    startTime: state.trips.start,
+	    endTime: state.trips.end
+	  };
+	}
+	
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    updateStart: function updateStart(time) {
+	      return dispatch((0, _actions.updateStartTime)(time));
+	    },
+	    updateEnd: function updateEnd(time) {
+	      return dispatch((0, _actions.updateEndTime)(time));
+	    }
+	  };
+	}
+	
+	var TimelineContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Timeline2.default);
+	
+	exports.default = TimelineContainer;
 
 /***/ }
 /******/ ]);
