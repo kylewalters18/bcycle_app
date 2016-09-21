@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export function toggle(option) {
   	return {
   	  	type: 'TOGGLE_RADIO',
@@ -32,12 +34,11 @@ export function fetchTripsAsync(text) {
 		dispatch(fetchTripsSync(text));
 
 		// async call to get the new data
-		fetch('https://bcycle.herokuapp.com/trip')
-		    .then((response) => response.json())
-		    .then((json) => {
+		axios('https://bcycle.herokuapp.com/trip')
+		    .then((response) => {
 		    	let trips = {
-					checkoutKiosksTally: tallyKiosks(json, (d) => d.checkout_kiosk),
-		      		returnKiosksTally: tallyKiosks(json, (d) => d.return_kiosk)
+					checkoutKiosksTally: tallyKiosks(response.data, (d) => d.checkout_kiosk),
+		      		returnKiosksTally: tallyKiosks(response.data, (d) => d.return_kiosk)
 		    	}
 		  		dispatch(receiveTrips(trips))
 		    });
