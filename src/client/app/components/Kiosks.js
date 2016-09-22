@@ -51,13 +51,16 @@ class Kiosks extends React.Component {
         .remove();
   }
 
-  render() {
-      if (this.props.toggle === 'checkout') {
-        this.updatePlot(this.props.checkoutKiosks)
-      } else if (this.props.toggle === 'return') {
-        this.updatePlot(this.props.returnKiosks)
-      }
+  componentDidUpdate() {
+    if (this.props.toggle === 'checkout') {
+      this.updatePlot(this.props.checkoutKiosks)
+    } else if (this.props.toggle === 'return') {
+      this.updatePlot(this.props.returnKiosks)
+    }
+  }
 
+  render() {
+      // were picking up the maps svg, so dont render anything with react
       return null;
   }
 }
