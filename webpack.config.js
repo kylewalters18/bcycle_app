@@ -15,7 +15,7 @@ var config = {
       {
         test : /\.js?/,
         include : APP_DIR,
-        exclude: 'node_modules/',
+        exclude: path.resolve(__dirname, 'node_modules'),
         loader : 'babel'
       }
     ]

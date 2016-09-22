@@ -28,6 +28,20 @@ export function receiveTrips(trips) {
 	}
 }
 
+export function updateStartDay(day) {
+	return {
+		type: 'START_DAY',
+		day
+	}
+}
+
+export function updateEndDay(day) {
+	return {
+		type: 'END_DAY',
+		day
+	}
+}
+
 export function updateStartTime(time) {
 	return {
 		type: 'START_TIME',
@@ -48,7 +62,8 @@ export function fetchTripsAsync(text) {
 		dispatch(fetchTripsSync(text));
 
 		// async call to get the new data
-		axios('https://bcycle.herokuapp.com/trip')
+		//axios('https://bcycle.herokuapp.com/trip')
+		axios('http://localhost:5000/trip')
 		    .then((response) => { dispatch(receiveTrips(response.data)) });
 	}
 }

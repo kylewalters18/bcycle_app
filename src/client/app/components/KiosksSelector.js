@@ -9,16 +9,16 @@ class KiosksSelector extends React.Component {
     let input
 
     return (
-      <RadioGroup value={ this.props.selection } name="kiosks" container="ul" childContainer="li">
+      <RadioGroup value={ this.props.selection } name="kiosks" container="div" childContainer="div">
           <Radio value="checkout"
                  className='mdl-color-text--grey-100'
                  onClick={ () => this.props.onClick('checkout')}>
-            Checkout Kiosks
+            Checked out bicycles
           </Radio>
           <Radio value="return"
                  className='mdl-color-text--grey-100'
                  onClick={ () => this.props.onClick('return')}>
-            Return Kiosks
+            Returned bicycles
           </Radio>
       </RadioGroup>
     )

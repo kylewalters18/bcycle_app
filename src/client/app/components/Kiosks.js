@@ -2,6 +2,8 @@ import React from 'react';
 
 import { select } from "d3-selection";
 import { transition } from "d3-transition";
+import { scaleLinear } from 'd3-scale';
+import { min, max } from 'd3-array';
 
 class Kiosks extends React.Component {
 
@@ -13,29 +15,33 @@ class Kiosks extends React.Component {
     this.svg = select("#map").select("svg");
     let map = this.props.map;
 
-    let points = this.svg.selectAll("circle").data(data, function(d) { return d.name; });
+    let points = this.svg.selectAll("circle").data(data, (d) => d.name);
 
     // Enter section
     points.enter().append("circle")
         .style("opacity", 0)
         .attr("r", 0)
-        .attr("transform", function(d) {
-            return "translate("+ map.latLngToLayerPoint(d.LatLng).x + ","+ map.latLngToLayerPoint(d.LatLng).y + ")";
+        .attr("transform", (d) => {
+            return "translate(" +
+              map.latLngToLayerPoint(d.LatLng).x + "," +
+              map.latLngToLayerPoint(d.LatLng).y + ")"
           })
       .transition().duration(500)
         .style("opacity", .6)
         .style("fill", "rgb(255, 87, 34)")
-        .attr("r", function(d) { return d.tally; });
+        .attr("r", (d) => d.tally)
 
     // Update section
     points
-        .attr("transform", function(d) {
-            return "translate("+ map.latLngToLayerPoint(d.LatLng).x + ","+ map.latLngToLayerPoint(d.LatLng).y + ")";
+        .attr("transform", (d) => {
+            return "translate("+
+              map.latLngToLayerPoint(d.LatLng).x + ","+
+              map.latLngToLayerPoint(d.LatLng).y + ")";
         })
       .transition().duration(500)
         .style("opacity", .6)
         .style("fill", "rgb(255, 87, 34)")
-        .attr("r", function(d) { return d.tally; })
+        .attr("r", (d) => d.tally)
 
     // Exit section
     points.exit()

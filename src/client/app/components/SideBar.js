@@ -17,8 +17,10 @@ class SideBar extends React.Component {
 				</Cell>
 				<Cell col={12} className="mdl-layout-spacer"/>
 				<Cell col={12}>
-					<KiosksSelectorContainer />
 					<TimelineContainer />
+					<br />
+					<br />
+					<KiosksSelectorContainer />
 				</Cell>
 			</Grid>
 		)
