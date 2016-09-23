@@ -26,6 +26,13 @@ var config = {
     ],
     extensions: ['', '.js']
   },
+  externals: {
+    'Config': JSON.stringify(process.env.ENV === 'development' ? {
+      serverUrl: "http://localhost:5000"
+    } : {
+      serverUrl: "https://bcycle.herokuapp.com"
+    })
+  }
 };
 
 module.exports = config;

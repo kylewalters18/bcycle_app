@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { serverUrl } from 'Config'
+
 
 export function toggle(option) {
   	return {
@@ -62,8 +64,7 @@ export function fetchTripsAsync(text) {
 		dispatch(fetchTripsSync(text));
 
 		// async call to get the new data
-		//axios('https://bcycle.herokuapp.com/trip')
-		axios('http://localhost:5000/trip')
+		axios(serverUrl + '/trip')
 		    .then((response) => { dispatch(receiveTrips(response.data)) });
 	}
 }
