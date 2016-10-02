@@ -3,8 +3,8 @@ const controls = (state = 'checkout', action) => {
     case 'TOGGLE_RADIO':
       return action.option;
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default controls
+export default controls;

@@ -1,6 +1,7 @@
-import { connect } from 'react-redux'
-import { fetchTripsAsync } from 'actions'
-import Kiosks from 'components/Kiosks'
+import { connect } from 'react-redux';
+
+import { fetchTripsAsync } from 'actions';
+import Kiosks from 'components/Kiosks';
 
 function mapStateToProps(state, ownProps) {
   return {
@@ -8,20 +9,20 @@ function mapStateToProps(state, ownProps) {
     checkoutKiosks: state.trips.checkoutKiosksTally,
     returnKiosks: state.trips.returnKiosksTally,
     zoom: state.zoom,
-    map: ownProps.map
-  }
+    map: ownProps.map,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onInitialize: () => dispatch(fetchTripsAsync())
-  }
+    onInitialize: () => dispatch(fetchTripsAsync()),
+  };
 }
 
 
 const KiosksContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Kiosks)
+)(Kiosks);
 
-export default KiosksContainer
+export default KiosksContainer;

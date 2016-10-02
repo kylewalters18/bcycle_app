@@ -3,8 +3,8 @@ const zoom = (state = 13, action) => {
     case 'ZOOM':
       return action.level;
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default zoom
+export default zoom;
