@@ -9,6 +9,14 @@ class Kiosks extends React.Component {
     this.props.onInitialize();
   }
 
+  componentDidUpdate() {
+    if (this.props.toggle === 'checkout') {
+      this.updatePlot(this.props.checkoutKiosks);
+    } else if (this.props.toggle === 'return') {
+      this.updatePlot(this.props.returnKiosks);
+    }
+  }
+
   updatePlot(data) {
     this.svg = select('#map').select('svg');
     const map = this.props.map;
@@ -49,14 +57,6 @@ class Kiosks extends React.Component {
         .style('opacity', 0)
         .attr('r', 0)
         .remove();
-  }
-
-  componentDidUpdate() {
-    if (this.props.toggle === 'checkout') {
-      this.updatePlot(this.props.checkoutKiosks);
-    } else if (this.props.toggle === 'return') {
-      this.updatePlot(this.props.returnKiosks);
-    }
   }
 
   render() {

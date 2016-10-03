@@ -59,7 +59,7 @@ export function updateEndTime(time) {
 }
 
 export function fetchTripsAsync(text) {
-  return function (dispatch) {
+  return (dispatch) => {
     // dispatch the sync action to update ui
     dispatch(fetchTripsSync(text));
 
