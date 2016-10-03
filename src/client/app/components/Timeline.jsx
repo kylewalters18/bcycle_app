@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { Slider } from 'react-mdl';
 
@@ -22,5 +22,10 @@ const Timeline = ({ updateEndDay, updateEndTime }) =>
     />
   </div>
 );
+
+Timeline.propTypes = {
+  updateEndDay: PropTypes.func.isRequired,
+  updateEndTime: PropTypes.func.isRequired,
+};
 
 export default Timeline;

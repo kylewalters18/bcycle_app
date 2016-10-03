@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
+
 
 class Kiosks extends React.Component {
 
@@ -27,11 +28,11 @@ class Kiosks extends React.Component {
     points.enter().append('circle')
         .style('opacity', 0)
         .attr('r', 0)
-        .attr('transform', (d) => {
-          return `translate(${
+        .attr('transform', d =>
+          `translate(${
               map.latLngToLayerPoint(d.LatLng).x},${
-              map.latLngToLayerPoint(d.LatLng).y})`;
-        })
+              map.latLngToLayerPoint(d.LatLng).y})`
+        )
       .transition()
       .duration(500)
         .style('opacity', 0.6)
@@ -64,5 +65,13 @@ class Kiosks extends React.Component {
     return null;
   }
 }
+
+Kiosks.propTypes = {
+  onInitialize: PropTypes.func.isRequired,
+  checkoutKiosks: PropTypes.array.isRequired,
+  returnKiosks: PropTypes.array.isRequired,
+  toggle: PropTypes.string.isRequired,
+  map: PropTypes.object.isRequired,
+};
 
 export default Kiosks;

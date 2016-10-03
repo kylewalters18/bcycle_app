@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import L from 'leaflet';
 
@@ -32,5 +32,11 @@ class Map extends React.Component {
     );
   }
 }
+
+Map.propTypes = {
+  zoom: PropTypes.number.isRequired,
+  onZoom: PropTypes.func.isRequired,
+};
+
 
 export default Map;

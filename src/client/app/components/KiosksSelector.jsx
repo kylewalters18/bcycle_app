@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { RadioGroup, Radio } from 'react-mdl';
 
@@ -21,5 +21,10 @@ const KiosksSelector = ({ selection, onClick }) =>
     </Radio>
   </RadioGroup>
 );
+
+KiosksSelector.propTypes = {
+  selection: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
 
 export default KiosksSelector;
