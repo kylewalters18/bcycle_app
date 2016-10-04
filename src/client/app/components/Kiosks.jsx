@@ -71,7 +71,7 @@ Kiosks.propTypes = {
   checkoutKiosks: PropTypes.array.isRequired,
   returnKiosks: PropTypes.array.isRequired,
   toggle: PropTypes.string.isRequired,
-  map: PropTypes.object.isRequired,
+  map: PropTypes.object,
 };
 
 export default Kiosks;

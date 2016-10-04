@@ -13,7 +13,12 @@ class Map extends React.Component {
       }
     );
 
-    const map = L.map('map', { scrollWheelZoom: false, center: [39.7392, -104.9903], zoom: this.props.zoom });
+    const map = L.map('map', {
+      scrollWheelZoom: false,
+      center: [39.7392, -104.9903],
+      zoom: this.props.zoom,
+      zoomControl: false,
+    });
     map.addLayer(layer);
 
     /* Initialize the SVG layer */
