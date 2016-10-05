@@ -1,10 +1,11 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import reducer from 'reducers';
+import { applyMiddleware, createStore } from 'redux';
+
 import App from 'components/App';
+import { Provider } from 'react-redux';
+import React from 'react';
+import reducer from 'reducers';
+import { render } from 'react-dom';
+import thunk from 'redux-thunk';
 
 const store = applyMiddleware(thunk)(createStore)(reducer);
 

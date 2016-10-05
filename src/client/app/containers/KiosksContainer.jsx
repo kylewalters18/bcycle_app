@@ -1,7 +1,6 @@
-import { connect } from 'react-redux';
-
-import { fetchTripsAsync } from 'actions';
 import Kiosks from 'components/Kiosks';
+import { connect } from 'react-redux';
+import { fetchTripsAsync } from 'actions';
 
 function mapStateToProps(state, ownProps) {
   return {

@@ -1,6 +1,5 @@
+import { Radio, RadioGroup } from 'react-mdl';
 import React, { PropTypes } from 'react';
-
-import { RadioGroup, Radio } from 'react-mdl';
 
 const KiosksSelector = ({ selection, onClick }) =>
 (

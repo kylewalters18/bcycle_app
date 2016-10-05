@@ -1,8 +1,6 @@
-import { connect } from 'react-redux';
-
-import { toggle } from 'actions';
 import KiosksSelector from 'components/KiosksSelector';
-
+import { connect } from 'react-redux';
+import { toggle } from 'actions';
 
 function mapStateToProps(state, ownProps) {
   return {

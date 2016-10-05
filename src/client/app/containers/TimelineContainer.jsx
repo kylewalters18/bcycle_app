@@ -1,7 +1,7 @@
-import { connect } from 'react-redux';
+import { updateEndDay, updateEndTime, updateStartDay, updateStartTime } from 'actions';
 
-import { updateStartDay, updateEndDay, updateStartTime, updateEndTime } from 'actions';
 import Timeline from 'components/Timeline';
+import { connect } from 'react-redux';
 
 function mapStateToProps(state, ownProps) {
   return {

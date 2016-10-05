@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
 
-
 class Kiosks extends React.Component {
 
   componentDidMount() {

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { serverUrl } from 'Config';
 
-
 export function toggle(option) {
   return {
     type: 'TOGGLE_RADIO',

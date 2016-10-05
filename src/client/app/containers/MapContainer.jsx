@@ -1,7 +1,6 @@
-import { connect } from 'react-redux';
-
-import { zoom } from 'actions';
 import Map from 'components/Map';
+import { connect } from 'react-redux';
+import { zoom } from 'actions';
 
 function mapStateToProps(state, ownProps) {
   return {

@@ -1,8 +1,7 @@
-import React from 'react';
-
-import { Grid, Cell } from 'react-mdl';
+import { Cell, Grid } from 'react-mdl';
 
 import KiosksSelectorContainer from 'containers/KiosksSelectorContainer';
+import React from 'react';
 import TimelineContainer from 'containers/TimelineContainer';
 
 const SideBar = () =>

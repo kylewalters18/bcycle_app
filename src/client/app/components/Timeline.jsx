@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 
 import { Slider } from 'react-mdl';
 
-
 const Timeline = ({ updateEndDay, updateEndTime }) =>
 (
   <div>
