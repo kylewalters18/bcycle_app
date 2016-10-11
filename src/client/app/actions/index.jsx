@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { serverUrl } from 'Config';
+
+const serverUrl = 'http://localhost:5000/v1';
 
 export function toggle(option) {
   return {
@@ -57,13 +58,50 @@ export function updateEndTime(time) {
   };
 }
 
+export function receiveRoutes(routes) {
+  return {
+    type: 'RECEIVE_ROUTES',
+    routes,
+  };
+}
+
+export function startFetchRoutes(text) {
+  return {
+    type: 'FETCH_ROUTES',
+    text,
+  };
+}
+
+export function fetchRoutes(text) {
+  return (dispatch) => {
+    // dispatch the sync action to update ui
+    dispatch(startFetchRoutes(text));
+
+    // async call to get the new data
+    axios.get(`${serverUrl}/route`, {
+      params: {
+        limit: 1000,
+      },
+    })
+    .then((response) => {
+      dispatch(receiveRoutes(response.data.routes));
+    });
+  };
+}
+
 export function fetchTripsAsync(text) {
   return (dispatch) => {
     // dispatch the sync action to update ui
     dispatch(fetchTripsSync(text));
 
     // async call to get the new data
-    axios(`${serverUrl}/trip`)
-        .then((response) => { dispatch(receiveTrips(response.data)); });
+    axios.get(`${serverUrl}/trip`, {
+      params: {
+        limit: 1000,
+      },
+    })
+    .then((response) => {
+      dispatch(receiveTrips(response.data.trips));
+    });
   };
 }

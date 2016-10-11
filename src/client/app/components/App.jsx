@@ -8,10 +8,18 @@ const App = () =>
 (
   <div style={{ width: '100%', height: '100%', margin: 'auto' }}>
     <Grid>
-      <Cell col={5}>
-        <SideBar />
+      <Cell col={12}>
+        <div
+          className="
+            mdl-typography--display-2
+            mdl-typography--text-center
+            mdl-color-text--grey-100
+          "
+        >
+          Denver B-Cycle
+        </div>
       </Cell>
-      <Cell col={7}>
+      <Cell col={12}>
         <MapContainer />
       </Cell>
     </Grid>

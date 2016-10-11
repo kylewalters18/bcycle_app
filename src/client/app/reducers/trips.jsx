@@ -1,5 +1,50 @@
 import L from 'leaflet';
 
+function filterTripsByDay(trips, start, end) {
+  const filteredTrips = [];
+  for (const trip of trips) {
+    const checkoutDate = new Date(trip.checkout_datetime);
+
+    const month = checkoutDate.getMonth() + 1;
+    if (month >= start && month <= end) {
+      filteredTrips.push(trip);
+    }
+  }
+  return filteredTrips;
+}
+
+function filterTripsByTime(trips, start, end) {
+  const filteredTrips = [];
+  for (const trip of trips) {
+    const checkoutDate = new Date(trip.checkout_datetime);
+
+    const time = checkoutDate.getHours() + 1;
+    if (time >= start && time <= end) {
+      filteredTrips.push(trip);
+    }
+  }
+  return filteredTrips;
+}
+
+function tallyKiosks(trips, extractKiosk) {
+  const map = new Map();
+  for (const trip of trips) {
+    const kiosk = extractKiosk(trip);
+    const kioskName = kiosk.name;
+
+    if (!map.has(kioskName)) {
+      map.set(kioskName, {
+        tally: 0,
+        LatLng: new L.LatLng(kiosk.lat, kiosk.lon),
+        name: kiosk.name,
+      });
+    }
+
+    map.get(kioskName).tally += 1;
+  }
+  return Array.from(map.values());
+}
+
 const trips = (state = {
   startDay: 1,
   endDay: 12,
@@ -73,50 +118,5 @@ const trips = (state = {
       return state;
   }
 };
-
-function filterTripsByDay(trips, start, end) {
-  const filteredTrips = [];
-  for (const trip of trips) {
-    const checkoutDate = new Date(trip.checkout_datetime);
-
-    const month = checkoutDate.getMonth() + 1;
-    if (month >= start && month <= end) {
-      filteredTrips.push(trip);
-    }
-  }
-  return filteredTrips;
-}
-
-function filterTripsByTime(trips, start, end) {
-  const filteredTrips = [];
-  for (const trip of trips) {
-    const checkoutDate = new Date(trip.checkout_datetime);
-
-    const time = checkoutDate.getHours() + 1;
-    if (time >= start && time <= end) {
-      filteredTrips.push(trip);
-    }
-  }
-  return filteredTrips;
-}
-
-function tallyKiosks(trips, extractKiosk) {
-  const map = new Map();
-  for (const trip of trips) {
-    const kiosk = extractKiosk(trip);
-    const kioskName = kiosk.name;
-
-    if (!map.has(kioskName)) {
-      map.set(kioskName, {
-        tally: 0,
-        LatLng: new L.LatLng(kiosk.lat, kiosk.lon),
-        name: kiosk.name,
-      });
-    }
-
-    map.get(kioskName).tally += 1;
-  }
-  return Array.from(map.values());
-}
 
 export default trips;
