@@ -21,7 +21,7 @@ const routes = (state = {
       return state;
 
     case 'RECEIVE_ROUTES':
-      return { ...state, routes: state.routes.concat(formatRoutes(action.routes)) };
+      return { ...state, routes: formatRoutes(action.routes) };
 
     default:
       return state;

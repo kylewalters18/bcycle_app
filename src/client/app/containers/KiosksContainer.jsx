@@ -1,12 +1,11 @@
 import Kiosks from 'components/Kiosks';
 import { connect } from 'react-redux';
-import { fetchTripsAsync } from 'actions';
+import { fetchKiosks } from 'actions';
 
 function mapStateToProps(state, ownProps) {
   return {
     toggle: state.controls,
-    checkoutKiosks: state.trips.checkoutKiosksTally,
-    returnKiosks: state.trips.returnKiosksTally,
+    kiosks: state.kiosks.kiosks,
     zoom: state.zoom,
     map: ownProps.map,
   };
@@ -14,7 +13,8 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onInitialize: () => dispatch(fetchTripsAsync()),
+    onInitialize: () => dispatch(fetchKiosks()),
+    updateSelectedKiosk: id => console.log(id),
   };
 }
 

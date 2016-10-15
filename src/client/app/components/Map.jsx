@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 
+import KiosksContainer from 'containers/KiosksContainer';
 import L from 'leaflet';
 import RoutesContainer from 'containers/RoutesContainer';
 
@@ -32,6 +33,7 @@ class Map extends React.Component {
     return (
       <div id="map" style={{ height: 'calc(100% - 32px - 64px)' }}>
         <RoutesContainer map={this.map} />
+        <KiosksContainer map={this.map} />
       </div>
     );
   }

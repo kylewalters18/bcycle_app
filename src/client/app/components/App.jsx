@@ -2,7 +2,6 @@ import { Cell, Grid } from 'react-mdl';
 
 import MapContainer from 'containers/MapContainer';
 import React from 'react';
-import SideBar from 'components/SideBar';
 
 const App = () =>
 (

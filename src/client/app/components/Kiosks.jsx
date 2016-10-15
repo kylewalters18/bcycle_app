@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
+import { select, selectAll } from 'd3-selection';
 
-import { select } from 'd3-selection';
 import { transition } from 'd3-transition';
 
 class Kiosks extends React.Component {
@@ -10,33 +10,33 @@ class Kiosks extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.toggle === 'checkout') {
-      this.updatePlot(this.props.checkoutKiosks);
-    } else if (this.props.toggle === 'return') {
-      this.updatePlot(this.props.returnKiosks);
-    }
+    this.updatePlot(this.props.kiosks);
   }
 
   updatePlot(data) {
     this.svg = select('#map').select('svg');
+    const that = this;
     const map = this.props.map;
-
     const points = this.svg.selectAll('circle').data(data, d => d.name);
 
     // Enter section
     points.enter().append('circle')
-        .style('opacity', 0)
-        .attr('r', 0)
+        .attr('r', (d) => {
+          return d.name === '10th & Osage' ? 8 : 3;
+        })
         .attr('transform', d =>
           `translate(${
               map.latLngToLayerPoint(d.LatLng).x},${
               map.latLngToLayerPoint(d.LatLng).y})`
         )
-      .transition()
-      .duration(500)
-        .style('opacity', 0.6)
+        .style('opacity', 0.75)
         .style('fill', 'rgb(255, 87, 34)')
-        .attr('r', d => d.tally);
+        .on('mouseover', function (d) {
+          select(that.selection).attr('r', 3);
+          select(this).attr('r', 8);
+          that.selection = this;
+          that.props.updateSelectedKiosk(d.id);
+        });
 
     // Update section
     points
@@ -45,17 +45,10 @@ class Kiosks extends React.Component {
             ${map.latLngToLayerPoint(d.LatLng).x},
             ${map.latLngToLayerPoint(d.LatLng).y}
           )`
-        )
-      .transition().duration(500)
-        .style('opacity', 0.6)
-        .style('fill', 'rgb(255, 87, 34)')
-        .attr('r', d => d.tally);
+        );
 
     // Exit section
     points.exit()
-      .transition().duration(500)
-        .style('opacity', 0)
-        .attr('r', 0)
         .remove();
   }
 
@@ -67,9 +60,7 @@ class Kiosks extends React.Component {
 
 Kiosks.propTypes = {
   onInitialize: PropTypes.func.isRequired,
-  checkoutKiosks: PropTypes.array.isRequired,
-  returnKiosks: PropTypes.array.isRequired,
-  toggle: PropTypes.string.isRequired,
+  kiosks: PropTypes.array.isRequired,
   map: PropTypes.object,
 };
 

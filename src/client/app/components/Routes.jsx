@@ -27,7 +27,7 @@ class Routes extends React.Component {
     routes.enter().append('path')
         .attr('d', d => lineBuilder(d))
         .style('stroke', 'rgb(255, 87, 34)')
-        .style('stroke-width', 1)
+        .style('stroke-width', () => Math.random() * 2)
         .style('stroke-opacity', 0.75)
         .style('fill-opacity', 0);
 
