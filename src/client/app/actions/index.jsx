@@ -76,7 +76,10 @@ export function fetchRoutes(text) {
     dispatch(startFetchRoutes(text));
 
     axios
-      .get(`${process.env.API_URL}/v1/route`, { params: { limit: 25 } })
+      .get(`${process.env.API_URL}/v1/route`, {
+        params: { limit: 100 },
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      })
       .then(response => dispatch(receiveRoutes(response.data.routes)));
   };
 }
@@ -88,9 +91,8 @@ export function fetchTripsAsync(text) {
 
     // async call to get the new data
     axios.get(`${process.env.API_URL}/v1/trip`, {
-      params: {
-        limit: 1000,
-      },
+      params: { limit: 1000 },
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
     })
     .then((response) => {
       dispatch(receiveTrips(response.data.trips));
