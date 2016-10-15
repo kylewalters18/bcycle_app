@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const serverUrl = 'http://localhost:5000/v1';
+import { serverUrl } from 'Config';
 
 export function toggle(option) {
   return {
@@ -77,15 +76,9 @@ export function fetchRoutes(text) {
     // dispatch the sync action to update ui
     dispatch(startFetchRoutes(text));
 
-    // async call to get the new data
-    axios.get(`${serverUrl}/route`, {
-      params: {
-        limit: 1000,
-      },
-    })
-    .then((response) => {
-      dispatch(receiveRoutes(response.data.routes));
-    });
+    axios
+      .get(`${serverUrl}/route`, { params: { limit: 25 } })
+      .then(response => dispatch(receiveRoutes(response.data.routes)));
   };
 }
 
