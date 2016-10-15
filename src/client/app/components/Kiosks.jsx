@@ -21,9 +21,7 @@ class Kiosks extends React.Component {
 
     // Enter section
     points.enter().append('circle')
-        .attr('r', (d) => {
-          return d.name === '10th & Osage' ? 8 : 3;
-        })
+        .attr('r', () => 4)
         .attr('transform', d =>
           `translate(${
               map.latLngToLayerPoint(d.LatLng).x},${
@@ -31,11 +29,11 @@ class Kiosks extends React.Component {
         )
         .style('opacity', 0.75)
         .style('fill', 'rgb(255, 87, 34)')
-        .on('mouseover', function (d) {
-          select(that.selection).attr('r', 3);
+        .on('click', function (d) {
+          select(that.selection).attr('r', 4);
           select(this).attr('r', 8);
           that.selection = this;
-          that.props.updateSelectedKiosk(d.id);
+          that.props.selecteKiosk(d.id);
         });
 
     // Update section

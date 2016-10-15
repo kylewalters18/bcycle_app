@@ -5,10 +5,6 @@ import { select } from 'd3-selection';
 
 class Routes extends React.Component {
 
-  componentDidMount() {
-    this.props.onInitialize();
-  }
-
   componentDidUpdate() {
     this.updatePlot(this.props.routes);
   }
@@ -21,11 +17,11 @@ class Routes extends React.Component {
         .x(d => map.latLngToLayerPoint(d.LatLng).x)
         .y(d => map.latLngToLayerPoint(d.LatLng).y);
 
-    const routes = this.svg.selectAll('path').data(data);
+    const routes = this.svg.selectAll('path').data(data, d => d.id);
 
     // Enter section
     routes.enter().append('path')
-        .attr('d', d => lineBuilder(d))
+        .attr('d', d => lineBuilder(d.route))
         .style('stroke', 'rgb(255, 87, 34)')
         .style('stroke-width', () => Math.random() * 2)
         .style('stroke-opacity', 0.75)
@@ -33,7 +29,7 @@ class Routes extends React.Component {
 
     // Update section
     routes
-      .attr('d', d => lineBuilder(d));
+      .attr('d', d => lineBuilder(d.route));
 
     // Exit section
     routes.exit().remove();
@@ -46,7 +42,6 @@ class Routes extends React.Component {
 }
 
 Routes.propTypes = {
-  onInitialize: PropTypes.func.isRequired,
   routes: PropTypes.array.isRequired,
   map: PropTypes.object,
 };

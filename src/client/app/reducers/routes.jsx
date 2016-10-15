@@ -7,7 +7,10 @@ function formatRoutes(routes) {
     for (const step of route.route) {
       formattedRoute.push({ LatLng: new L.LatLng(step.lat, step.lon) });
     }
-    formattedRoutes.push(formattedRoute);
+    formattedRoutes.push({
+      route: formattedRoute,
+      id: route.id,
+    });
   }
 
   return formattedRoutes;
