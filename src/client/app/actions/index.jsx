@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { serverUrl } from 'Config';
 
 export function toggle(option) {
   return {
@@ -77,7 +76,7 @@ export function fetchRoutes(text) {
     dispatch(startFetchRoutes(text));
 
     axios
-      .get(`${serverUrl}/route`, { params: { limit: 25 } })
+      .get(`${process.env.API_URL}/v1/route`, { params: { limit: 25 } })
       .then(response => dispatch(receiveRoutes(response.data.routes)));
   };
 }
@@ -88,7 +87,7 @@ export function fetchTripsAsync(text) {
     dispatch(fetchTripsSync(text));
 
     // async call to get the new data
-    axios.get(`${serverUrl}/trip`, {
+    axios.get(`${process.env.API_URL}/v1/trip`, {
       params: {
         limit: 1000,
       },
