@@ -33,6 +33,9 @@ class Routes extends React.Component {
 
     // Exit section
     routes.exit().remove();
+
+    // Ensure that routes are rendered behind anything else
+    this.svg.selectAll('path').lower();
   }
 
   render() {
