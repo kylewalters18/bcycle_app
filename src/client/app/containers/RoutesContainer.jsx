@@ -1,4 +1,4 @@
-import Routes from 'components/routes';
+import Routes from 'components/Routes';
 import { connect } from 'react-redux';
 
 function mapStateToProps(state, ownProps) {
