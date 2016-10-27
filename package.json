@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
+    "lint": "eslint -c .eslintrc --ext .jsx src/client/app/**",
     "dev": "webpack -d --watch",
     "build": "webpack -p",
     "start": "webpack-dev-server --inline --hot"
