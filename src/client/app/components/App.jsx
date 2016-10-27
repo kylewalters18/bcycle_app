@@ -1,6 +1,7 @@
 import { Cell, Grid } from 'react-mdl';
 
 import MapContainer from 'containers/MapContainer';
+import PopularTimes from 'containers/PopularTimesContainer';
 import React from 'react';
 import TopDestinations from 'containers/TopDestinationsContainer';
 
@@ -24,6 +25,7 @@ const App = () =>
       </Cell>
       <Cell col={3}>
         <TopDestinations />
+        <PopularTimes />
       </Cell>
     </Grid>
   </div>
