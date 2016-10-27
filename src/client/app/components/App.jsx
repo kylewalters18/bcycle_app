@@ -2,6 +2,7 @@ import { Cell, Grid } from 'react-mdl';
 
 import MapContainer from 'containers/MapContainer';
 import React from 'react';
+import TopDestinations from 'containers/TopDestinationsContainer';
 
 const App = () =>
 (
@@ -18,8 +19,11 @@ const App = () =>
           Denver B-Cycle
         </div>
       </Cell>
-      <Cell col={12}>
+      <Cell col={9}>
         <MapContainer />
+      </Cell>
+      <Cell col={3}>
+        <TopDestinations />
       </Cell>
     </Grid>
   </div>
