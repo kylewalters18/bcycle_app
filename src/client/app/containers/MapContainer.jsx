@@ -4,7 +4,7 @@ import { zoom } from 'actions';
 
 function mapStateToProps(state) {
   return {
-    zoom: state.zoom,
+    zoom: state.map.zoom,
   };
 }
 

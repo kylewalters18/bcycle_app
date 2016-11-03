@@ -1,4 +1,6 @@
-const zoom = (state = 13, action) => {
+const map = (state = {
+  zoom: 13,
+}, action) => {
   switch (action.type) {
     case 'ZOOM':
       return action.level;
@@ -7,4 +9,4 @@ const zoom = (state = 13, action) => {
   }
 };
 
-export default zoom;
+export default map;

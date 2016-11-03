@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import kiosks from 'reducers/kiosks';
+import map from 'reducers/map';
 import routes from 'reducers/routes';
-import zoom from 'reducers/zoom';
 
 const reducer = combineReducers({
-  zoom,
+  map,
   routes,
   kiosks,
 });
