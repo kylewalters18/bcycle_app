@@ -24,15 +24,19 @@ class Routes extends React.Component {
         .attr('d', d => lineBuilder(d.route))
         .style('stroke', 'rgb(255, 87, 34)')
         .style('stroke-width', 1)
-        .style('stroke-opacity', 0.75)
-        .style('fill-opacity', 0);
+        .style('stroke-opacity', 0)
+        .style('fill-opacity', 0)
+      .transition()
+      .duration(5000)
+        .style('stroke-opacity', 0.75);
 
     // Update section
     routes
       .attr('d', d => lineBuilder(d.route));
 
     // Exit section
-    routes.exit().remove();
+    routes.exit()
+      .remove();
 
     // Ensure that routes are rendered behind anything else
     this.svg.selectAll('path').lower();
