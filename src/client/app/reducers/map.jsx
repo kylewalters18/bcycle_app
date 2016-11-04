@@ -3,7 +3,7 @@ const map = (state = {
 }, action) => {
   switch (action.type) {
     case 'ZOOM':
-      return action.level;
+      return { ...state, zoom: action.level };
     default:
       return state;
   }

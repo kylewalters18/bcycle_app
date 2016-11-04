@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 function mapStateToProps(state, ownProps) {
   return {
     routes: state.routes.routes,
-    zoom: state.zoom,
+    zoom: state.map.zoom,
     map: ownProps.map,
   };
 }

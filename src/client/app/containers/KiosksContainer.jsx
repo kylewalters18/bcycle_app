@@ -7,7 +7,7 @@ function mapStateToProps(state, ownProps) {
   return {
     toggle: state.controls,
     kiosks: state.kiosks.kiosks,
-    zoom: state.zoom,
+    zoom: state.map.zoom,
     map: ownProps.map,
   };
 }
