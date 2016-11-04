@@ -5,10 +5,12 @@ import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 
 class Destinations extends React.Component {
+  constructor() {
+    super();
+    this.barHeight = 25;
+  }
 
   componentDidMount() {
-    this.barHeight = 25;
-
     this.svg = select(this.node).append('g');
     this.x = scaleLinear()
       .range([0, this.node.getBoundingClientRect().width]);
@@ -61,7 +63,7 @@ class Destinations extends React.Component {
           "
         >Top Destinations</div>
         <br />
-        <svg width={'100%'} ref={(node) => { this.node = node; }} />
+        <svg width={'100%'} height={this.barHeight * 5} ref={(node) => { this.node = node; }} />
       </div>
     );
   }
