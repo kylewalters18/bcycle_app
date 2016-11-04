@@ -2,7 +2,7 @@ import L from 'leaflet';
 
 function formatRoutes(routes) {
   const formattedRoutes = [];
-  for (const route of routes) {
+  for (const route of routes.neighbors) {
     const formattedRoute = [];
     for (const step of route.route) {
       formattedRoute.push({ LatLng: new L.LatLng(step.lat, step.lon) });
@@ -19,6 +19,7 @@ function formatRoutes(routes) {
 const routes = (state = {
   routes: [],
   topDestinations: [],
+  stationName: '',
 }, action) => {
   switch (action.type) {
     case 'FETCH_ROUTES':
@@ -31,9 +32,13 @@ const routes = (state = {
       );
       randomNumbers.sort();
       randomNumbers.reverse();
-      const data = randomNumbers.map((d, i) => ({ value: d, name: `Station ${i}` }));
+      const data = randomNumbers.map(d => ({
+        value: d,
+        name: action.routes.neighbors[Math.floor(Math.random() * 86)].kiosk.name,
+      }));
 
       return { ...state,
+        stationName: action.routes.kiosk.name,
         routes: formatRoutes(action.routes),
         topDestinations: data,
       };

@@ -45,22 +45,7 @@ export function selectKiosk(id) {
         params: { limit: 100 },
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
       })
-      .then(response => dispatch(receiveRoutes(response.data.routes)));
-  };
-}
-
-export function fetchRoutes(text) {
-  return (dispatch) => {
-    // dispatch the sync action to update ui
-    dispatch(startFetchRoutes(text));
-
-    // async call to get the new data
-    axios
-      .get(`${process.env.API_URL}/v1/route`, {
-        params: { limit: 100 },
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-      })
-      .then(response => dispatch(receiveRoutes(response.data.routes)));
+      .then(response => dispatch(receiveRoutes(response.data)));
   };
 }
 

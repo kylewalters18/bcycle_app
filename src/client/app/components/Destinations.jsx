@@ -25,27 +25,43 @@ class Destinations extends React.Component {
 
     // const bars = this.svg.selectAll('rect').data(data, d => d.name);
     const bars = this.svg.selectAll('g')
-        .data(data, d => d.name);
+        .data(data);
 
     const barsEnter = bars.enter().append('g')
         .attr('transform', (d, i) => `translate(0,${i * this.barHeight})`);
 
     // Enter section
     barsEnter.append('rect')
-      .attr('width', d => this.x(d.value))
-      .attr('height', this.barHeight - 2)
-      .attr('fill', 'rgb(255, 87, 34)');
+        .attr('width', 0)
+        .attr('height', this.barHeight - 2)
+        .attr('fill', 'rgb(255, 87, 34)')
+      .transition()
+      .duration(1000)
+        .attr('width', d => this.x(d.value));
 
     barsEnter.append('text')
-      .attr('x', 3)
-      .attr('y', this.barHeight / 2)
-      .attr('dy', '.35em')
-      .attr('fill', 'white')
-      .text(d => d.name);
+        .attr('x', 3)
+        .attr('y', this.barHeight / 2)
+        .attr('dy', '.35em')
+        .attr('fill', 'rgb(255, 87, 34)')
+      .transition()
+      .delay(500)
+      .duration(500)
+        .attr('fill', 'white')
+        .text(d => d.name);
 
     // Update section
-    bars.select('rect').transition().duration(300)
-      .attr('width', d => this.x(d.value));
+    bars.select('rect')
+      .transition()
+      .duration(1000)
+        .attr('width', d => this.x(d.value));
+
+    bars.select('text')
+        .attr('fill', 'rgb(255, 87, 34)')
+      .transition()
+      .duration(1000)
+        .attr('fill', 'white')
+        .text(d => d.name);
 
     // Exit section
     bars.exit()
@@ -61,8 +77,14 @@ class Destinations extends React.Component {
             mdl-typography--text-center
             mdl-color-text--grey-100
           "
-        >Top Destinations</div>
+        >{this.props.stationName}</div>
         <br />
+        <div
+          className="
+            mdl-typography--header
+            mdl-color-text--grey-100
+          "
+        >Top Destinations</div>
         <svg width={'100%'} height={this.barHeight * 5} ref={(node) => { this.node = node; }} />
       </div>
     );
@@ -71,6 +93,7 @@ class Destinations extends React.Component {
 
 
 Destinations.propTypes = {
+  stationName: PropTypes.string.isRequired,
   destinations: PropTypes.array.isRequired,
 };
 
