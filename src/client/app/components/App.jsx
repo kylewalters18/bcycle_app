@@ -25,7 +25,6 @@ const App = () =>
       </Cell>
       <Cell col={3}>
         <TopDestinations />
-        <PopularTimes />
       </Cell>
     </Grid>
   </div>

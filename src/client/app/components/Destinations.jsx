@@ -7,6 +7,8 @@ import { select } from 'd3-selection';
 class Destinations extends React.Component {
 
   componentDidMount() {
+    this.barHeight = 25;
+
     this.svg = select(this.node).append('g');
     this.x = scaleLinear()
       .range([0, this.node.getBoundingClientRect().width]);
@@ -18,7 +20,7 @@ class Destinations extends React.Component {
     );
     randomNumbers.sort();
     randomNumbers.reverse();
-    const data = randomNumbers.map((d, i) => ({ value: d, name: i }));
+    const data = randomNumbers.map((d, i) => ({ value: d, name: `Station ${i}` }));
 
     this.updatePlot(data);
   }
@@ -27,18 +29,28 @@ class Destinations extends React.Component {
     this.x
       .domain([0, max(data.map(d => d.value))]);
 
-    const bars = this.svg.selectAll('rect').data(data, d => d.name);
+    // const bars = this.svg.selectAll('rect').data(data, d => d.name);
+    const bars = this.svg.selectAll('g')
+        .data(data, d => d.name);
+
+    const barsEnter = bars.enter().append('g')
+        .attr('transform', (d, i) => `translate(0,${i * this.barHeight})`);
 
     // Enter section
-    bars.enter().append('rect')
-      .attr('x', 0)
-      .attr('y', (d, i) => i * 20)
+    barsEnter.append('rect')
       .attr('width', d => this.x(d.value))
-      .attr('height', 18)
+      .attr('height', this.barHeight - 2)
       .attr('fill', 'rgb(255, 87, 34)');
 
+    barsEnter.append('text')
+      .attr('x', 3)
+      .attr('y', this.barHeight / 2)
+      .attr('dy', '.35em')
+      .attr('fill', 'white')
+      .text(d => d.name);
+
     // Update section
-    bars.transition().duration(300)
+    bars.select('rect').transition().duration(300)
       .attr('width', d => this.x(d.value));
 
     // Exit section
@@ -57,7 +69,7 @@ class Destinations extends React.Component {
           "
         >Top Destinations</div>
         <br />
-        <svg width={150} ref={(node) => { this.node = node; }} />
+        <svg width={'100%'} ref={(node) => { this.node = node; }} />
       </div>
     );
   }
