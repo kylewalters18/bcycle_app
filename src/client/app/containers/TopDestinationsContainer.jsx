@@ -1,5 +1,6 @@
 import Destinations from 'components/Destinations';
 import { connect } from 'react-redux';
+import { mouseoverKiosk } from 'actions';
 
 function mapStateToProps(state) {
   return {
@@ -10,6 +11,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    mouseoverKiosk: kiosk => dispatch(mouseoverKiosk(kiosk)),
   };
 }
 

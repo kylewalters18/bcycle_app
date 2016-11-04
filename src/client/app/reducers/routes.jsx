@@ -10,6 +10,7 @@ function formatRoutes(routes) {
     formattedRoutes.push({
       route: formattedRoute,
       id: route.id,
+      name: route.kiosk.name,
     });
   }
 

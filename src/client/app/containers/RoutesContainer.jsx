@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 function mapStateToProps(state, ownProps) {
   return {
+    highlightedKiosk: state.kiosks.highlightedKiosk,
     routes: state.routes.routes,
     zoom: state.map.zoom,
     map: ownProps.map,

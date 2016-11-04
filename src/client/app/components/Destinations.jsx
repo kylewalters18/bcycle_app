@@ -28,7 +28,9 @@ class Destinations extends React.Component {
         .data(data);
 
     const barsEnter = bars.enter().append('g')
-        .attr('transform', (d, i) => `translate(0,${i * this.barHeight})`);
+        .attr('transform', (d, i) => `translate(0,${i * this.barHeight})`)
+        .on('mouseover', d => this.props.mouseoverKiosk(d.name))
+        .on('mouseout', () => this.props.mouseoverKiosk(''));
 
     // Enter section
     barsEnter.append('rect')
@@ -95,6 +97,7 @@ class Destinations extends React.Component {
 Destinations.propTypes = {
   stationName: PropTypes.string.isRequired,
   destinations: PropTypes.array.isRequired,
+  mouseoverKiosk: PropTypes.func.isRequired,
 };
 
 

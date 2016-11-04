@@ -31,8 +31,17 @@ class Routes extends React.Component {
         .style('stroke-opacity', 0.75);
 
     // Update section
+    const that = this;
     routes
-      .attr('d', d => lineBuilder(d.route));
+      .attr('d', d => lineBuilder(d.route))
+      .style('stroke', function (d) {
+        if (d.name === that.props.highlightedKiosk) {
+          select(this).lower();
+          return 'white';
+        }
+        return 'rgb(255, 87, 34)';
+      })
+      .style('stroke-width', d => d.name === this.props.highlightedKiosk ? 3 : 1);
 
     // Exit section
     routes.exit()
@@ -50,6 +59,7 @@ class Routes extends React.Component {
 
 Routes.propTypes = {
   routes: PropTypes.array.isRequired,
+  highlightedKiosk: PropTypes.string.isRequired,
   map: PropTypes.object,
 };
 

@@ -14,6 +14,7 @@ function formatKiosks(kiosks) {
 
 const kiosks = (state = {
   kiosks: [],
+  highlightedKiosk: '',
 }, action) => {
   switch (action.type) {
     case 'FETCH_KIOSKS':
@@ -21,6 +22,9 @@ const kiosks = (state = {
 
     case 'RECEIVE_KIOSKS':
       return { ...state, kiosks: formatKiosks(action.kiosks) };
+
+    case 'KIOSK_MOUSEOVER':
+      return { ...state, highlightedKiosk: action.kiosk };
 
     default:
       return state;

@@ -7,6 +7,13 @@ export function zoom(level) {
   };
 }
 
+export function mouseoverKiosk(kiosk) {
+  return {
+    type: 'KIOSK_MOUSEOVER',
+    kiosk,
+  };
+}
+
 function startFetchKiosks(text) {
   return {
     type: 'FETCH_KIOSKS',
