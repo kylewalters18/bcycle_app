@@ -18,13 +18,25 @@ function formatRoutes(routes) {
 
 const routes = (state = {
   routes: [],
+  topDestinations: [],
 }, action) => {
   switch (action.type) {
     case 'FETCH_ROUTES':
       return state;
 
     case 'RECEIVE_ROUTES':
-      return { ...state, routes: formatRoutes(action.routes) };
+      const randomNumbers = Array.from(
+        { length: 5 },
+        () => 50 + Math.floor(Math.random() * 50)
+      );
+      randomNumbers.sort();
+      randomNumbers.reverse();
+      const data = randomNumbers.map((d, i) => ({ value: d, name: `Station ${i}` }));
+
+      return { ...state,
+        routes: formatRoutes(action.routes),
+        topDestinations: data,
+      };
 
     default:
       return state;

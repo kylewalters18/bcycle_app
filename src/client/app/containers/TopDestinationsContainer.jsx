@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 function mapStateToProps(state) {
   return {
-    destinations: ['Test 1', 'Test 2', 'Test 3'],
+    destinations: state.routes.topDestinations,
   };
 }
 

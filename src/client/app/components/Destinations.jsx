@@ -14,15 +14,7 @@ class Destinations extends React.Component {
       .range([0, this.node.getBoundingClientRect().width]);
   }
   componentDidUpdate() {
-    const randomNumbers = Array.from(
-      { length: 5 },
-      () => 10 + Math.floor(Math.random() * 10)
-    );
-    randomNumbers.sort();
-    randomNumbers.reverse();
-    const data = randomNumbers.map((d, i) => ({ value: d, name: `Station ${i}` }));
-
-    this.updatePlot(data);
+    this.updatePlot(this.props.destinations);
   }
 
   updatePlot(data) {
