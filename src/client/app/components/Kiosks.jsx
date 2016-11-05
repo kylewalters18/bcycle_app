@@ -30,8 +30,13 @@ class Kiosks extends React.Component {
         .style('opacity', 0.75)
         .style('fill', 'rgb(255, 87, 34)')
         .on('click', function (d) {
-          select(that.selection).attr('r', 4);
-          select(this).attr('r', 8);
+          select(that.selection)
+            .attr('r', 4)
+            .style('fill', 'rgb(255, 87, 34)');
+          select(this)
+            .attr('r', 6)
+            .style('fill', 'white');
+
           that.selection = this;
           that.props.selecteKiosk(d.id);
         });
