@@ -87,7 +87,7 @@ class Destinations extends React.Component {
             mdl-color-text--grey-100
           "
         >Top Destinations</div>
-        <svg width={'100%'} height={this.barHeight * 5} ref={(node) => { this.node = node; }} />
+      <svg width={'100%'} height={this.barHeight * this.props.destinations.length} ref={(node) => { this.node = node; }} />
       </div>
     );
   }

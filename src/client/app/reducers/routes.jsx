@@ -28,8 +28,8 @@ const routes = (state = {
 
     case 'RECEIVE_ROUTES':
       const randomNumbers = Array.from(
-        { length: 5 },
-        () => 50 + Math.floor(Math.random() * 50)
+        { length: 15 },
+        () => 50 + Math.floor(Math.random() * 25)
       );
       randomNumbers.sort();
       randomNumbers.reverse();
