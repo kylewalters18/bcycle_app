@@ -27,7 +27,7 @@ class Routes extends React.Component {
         .style('stroke-opacity', 0)
         .style('fill-opacity', 0)
       .transition()
-      .duration(5000)
+      .duration(1000)
         .style('stroke-opacity', 0.75);
 
     // Update section

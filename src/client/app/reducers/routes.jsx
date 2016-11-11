@@ -28,7 +28,7 @@ const routes = (state = {
 
     case 'RECEIVE_ROUTES':
       const randomNumbers = Array.from(
-        { length: 15 },
+        { length: 8 },
         () => 50 + Math.floor(Math.random() * 25)
       );
       randomNumbers.sort();

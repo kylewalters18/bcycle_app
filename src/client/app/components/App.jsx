@@ -20,11 +20,13 @@ const App = () =>
           Denver B-Cycle
         </div>
       </Cell>
-      <Cell col={9}>
+      <Cell col={8}>
         <MapContainer />
       </Cell>
-      <Cell col={3}>
+      <Cell col={4}>
         <TopDestinations />
+        <br />
+        <PopularTimes />
       </Cell>
     </Grid>
   </div>
