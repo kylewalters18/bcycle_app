@@ -82,12 +82,13 @@ class Destinations extends React.Component {
         >{this.props.stationName}</div>
         <br />
         <div
+          style={{ marginBottom: '15px' }}
           className="
             mdl-typography--header
             mdl-color-text--grey-100
           "
         >Top Destinations</div>
-      <svg width={'100%'} height={this.barHeight * this.props.destinations.length} ref={(node) => { this.node = node; }} />
+        <svg width={'100%'} height={this.barHeight * this.props.destinations.length} ref={(node) => { this.node = node; }} />
       </div>
     );
   }

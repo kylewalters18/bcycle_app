@@ -1,4 +1,4 @@
-import { fetchKiosks, selectKiosk } from 'actions';
+import { fetchKioskDestinations, fetchKioskNeighbors, fetchKiosks } from 'actions';
 
 import Kiosks from 'components/Kiosks';
 import { connect } from 'react-redux';
@@ -15,7 +15,10 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
   return {
     onInitialize: () => dispatch(fetchKiosks()),
-    selecteKiosk: id => dispatch(selectKiosk(id)),
+    selecteKiosk: (id) => {
+      dispatch(fetchKioskNeighbors(id));
+      dispatch(fetchKioskDestinations(id));
+    },
   };
 }
 

@@ -26,22 +26,19 @@ const routes = (state = {
     case 'FETCH_ROUTES':
       return state;
 
-    case 'RECEIVE_ROUTES':
-      const randomNumbers = Array.from(
-        { length: 8 },
-        () => 50 + Math.floor(Math.random() * 25)
-      );
-      randomNumbers.sort();
-      randomNumbers.reverse();
-      const data = randomNumbers.map(d => ({
-        value: d,
-        name: action.routes.neighbors[Math.floor(Math.random() * 86)].kiosk.name,
+    case 'RECEIVE_DESTINATIONS':
+      const data = action.destinations.map(d => ({
+        value: d.count,
+        name: d.name,
       }));
 
       return { ...state,
+        topDestinations: data,
+      };
+    case 'RECEIVE_ROUTES':
+      return { ...state,
         stationName: action.routes.kiosk.name,
         routes: formatRoutes(action.routes),
-        topDestinations: data,
       };
 
     default:

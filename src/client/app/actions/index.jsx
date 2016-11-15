@@ -42,7 +42,14 @@ function startFetchRoutes(text) {
   };
 }
 
-export function selectKiosk(id) {
+function receiveDestinations(destinations) {
+  return {
+    type: 'RECEIVE_DESTINATIONS',
+    destinations,
+  };
+}
+
+export function fetchKioskNeighbors(id) {
   return (dispatch) => {
     dispatch(startFetchRoutes(id));
 
@@ -53,6 +60,19 @@ export function selectKiosk(id) {
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
       })
       .then(response => dispatch(receiveRoutes(response.data)));
+  };
+}
+
+export function fetchKioskDestinations(id) {
+  return (dispatch) => {
+    dispatch(startFetchRoutes(id));
+
+    // async call to get the new data
+    axios
+      .get(`${process.env.API_URL}/v1/kiosk/${id}/destinations`, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      })
+      .then(response => dispatch(receiveDestinations(response.data)));
   };
 }
 
