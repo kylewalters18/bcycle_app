@@ -1,14 +1,15 @@
 import React, { PropTypes } from 'react';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { curveCardinal, line } from 'd3-shape';
+import { max, min } from 'd3-array';
 import { scaleLinear, scaleTime } from 'd3-scale';
 
-import { max } from 'd3-array';
 import { select } from 'd3-selection';
 
 class Times extends React.Component {
+
   componentDidMount() {
-    const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+    const margin = { top: 20, right: 20, bottom: 20, left: 30 };
     const width = this.node.getBoundingClientRect().width - margin.left - margin.right;
     const height = this.node.getBoundingClientRect().height - margin.top - margin.bottom;
 
@@ -50,28 +51,29 @@ class Times extends React.Component {
   }
 
   componentDidUpdate() {
-    const randomNumbers = Array.from(
-      { length: 12 },
-      () => Math.floor(Math.random() * 150)
-    );
-    const data = randomNumbers.map((d, i) => ({
-      x: new Date(2015, i),
-      y: d,
-    }));
-
-    this.updateChart(data);
+    this.updateChart(this.props.histogram);
   }
 
   updateChart(data) {
     this.y.domain([0, max(data.map(d => d.y))]);
+    // this.x.domain([min(data.map(d => d.x)), max(data.map(d => d.x))]);
+    this.x.domain([data[0].x, data[data.length - 1].x]);
 
     const yAxisGroup = this.svg.select('.y.axis')
-          .transition()
-          .duration(1000)
-          .call(this.yAxis);
+      .transition()
+      .duration(1000)
+      .call(this.yAxis);
     yAxisGroup.selectAll('line').style('stroke', 'white').style('stroke-dasharray', '5,10');
     yAxisGroup.selectAll('path').style('stroke', 'white');
     yAxisGroup.selectAll('text').style('fill', 'white');
+
+    const xAxisGroup = this.svg.select('.x.axis')
+      .transition()
+      .duration(1000)
+      .call(this.xAxis);
+    xAxisGroup.selectAll('line').style('stroke', 'white');
+    xAxisGroup.selectAll('path').style('stroke', 'white');
+    xAxisGroup.selectAll('text').style('fill', 'white');
 
     const paths = this.svg.selectAll('.line')
         .data([data]);
@@ -137,6 +139,7 @@ class Times extends React.Component {
 
 
 Times.propTypes = {
+  histogram: PropTypes.array.isRequired,
 };
 
 

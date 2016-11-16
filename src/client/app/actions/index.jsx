@@ -89,3 +89,22 @@ export function fetchKiosks(text) {
     .then(response => dispatch(receiveKiosks(response.data.kiosks)));
   };
 }
+
+function receiveHistogram(histogram) {
+  return {
+    type: 'RECEIVE_HISTOGRAM',
+    histogram,
+  };
+}
+
+export function fetchHistogram(id) {
+  return (dispatch) => {
+    // dispatch the sync action to update ui
+
+    // async call to get the new data
+    axios.get(`${process.env.API_URL}/v1/kiosk/${id}/histogram`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    })
+    .then(response => dispatch(receiveHistogram(response.data)));
+  };
+}

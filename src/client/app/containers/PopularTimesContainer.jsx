@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 function mapStateToProps(state) {
   return {
-    times: ['Test 1', 'Test 2', 'Test 3'],
+    histogram: state.times.histogram,
   };
 }
 
